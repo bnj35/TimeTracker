@@ -1,9 +1,10 @@
 <script setup>
-import TheWelcome from '../components/TheWelcome.vue'
+import { ColorPicker } from 'primevue';
+
 </script>
 
 <template>
   <main>
-    <TheWelcome />
+    <ColorPicker v-model="color" />
   </main>
 </template>

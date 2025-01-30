@@ -1,18 +1,17 @@
 <script setup>
 import NavbarComponnent from '@/components/NavbarComponnent.vue';
-import HomeComponnent from '@/components/NewFormComponnent.vue';
-import { ref } from 'vue';
-import { RouterView, RouterLink } from 'vue-router';
-
-
-
+import NewActiviteComponnent from '@/components/NewActiviteComponnent.vue';
+import GetActiviteComponnent from '@/components/GetActiviteComponnent.vue';
 
 </script>
 
 <template>
   <NavbarComponnent />
-  <HomeComponnent />
-  
+  <div class="flex row w-full items-center justify-center gap-4 ">
+  <NewActiviteComponnent />
+  <GetActiviteComponnent />
+</div>
+
   <main>
 
   </main>

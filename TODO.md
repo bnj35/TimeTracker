@@ -1,2 +1,4 @@
 # Todo list :
-- [ ] Feature
+Vadim :
+-  [ ] Reporting / statistiques
+

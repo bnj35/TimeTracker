@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useUserStore } from "../stores/userStore.js";
 import { useRouter } from 'vue-router';
 
-export function useAPI(url) {
+export function useAPI() {
 
     const userStore = useUserStore();
     const token = userStore.user?.token;
@@ -14,7 +14,7 @@ export function useAPI(url) {
         baseURL: apiBase,
         headers: {
             'Content-Type': 'application/json',
-            ...(token && { 'Authorization': `Bearer ${token}` })
+            ...(token && { 'Authorization': `key=${token}` })
         }
     });
 
@@ -22,11 +22,11 @@ export function useAPI(url) {
         response => response,
         error => {
             if (error.response && error.response.status === 401) {
-                router.push('/login');
+                router.push('/login').then(r => r);
             }
             return Promise.reject(error);
         }
     );
 
-    return api.get(url);
+    return api;
 }

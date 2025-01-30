@@ -1,94 +1,47 @@
 // stores/useUserStore.ts
-import { defineStore, skipHydrate } from 'pinia'
+import { defineStore } from 'pinia'
 import piniaPersist from 'pinia-plugin-persist';
+import {useAPI} from "@/composables/useAPI.js";
+import {ref} from "vue";
 
 export const useUserStore = defineStore('user', () => {
 
+    const api = useAPI()
+
     const user = ref({
         name: '',
-        email: '',
+        mail: '',
         token: '',
     })
 
-    async function login(email, password){
 
-        //Get the Back url from nuxt.config.ts
-        const apiBase = config.public.apiBase
 
-        //first call the backend login route
-        const response: User = await $fetch(`${apiBase}/api/user/login`, {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                email: email,
-                password: password,
-                device_name: 'web'
-            }),
+    async function login(name, mail){
+
+        const response = await api.post('/api/apikeys', {
+            name: name,
+            email: mail,
         })
-        if (response.errors && response.errors.length > 0) {
-            throw new Error(response.message);
+        // if the response is successful, set the user token
+        if (!response.error) {
+            user.value.mail = response.data.email;
+            user.value.name = response.data.name;
+            user.value.token = response.data.key;
         }
-        const userData: User = {
-            token: response.token,
-            id: response.id,
-            fullName: response.fullName,
-            email: response.email,
-            created_at: response.createdAt,
-            updated_at: response.updatedAt,
-        }
-        user.value = userData
+        return  response
     }
 
-    async function logout():Promise<void>{
-        const config = useRuntimeConfig()
-        const apiBase = config.public.apiBase
-        try {
-            await $fetch(`${apiBase}/api/user/logout`, {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                    'Authorization': `Bearer ${user.value?.token.token}`
-                },
-            })
-        }catch (error){
-            console.error(error)
-        }
-        user.value = null
+    async function logout(){
+
     }
 
-    async function fetchUserWithToken(token: string):Promise<void>{
-        const config = useRuntimeConfig()
-        const apiBase = config.public.apiBase
-        const response: User = await $fetch(`${apiBase}/api/user/me`, {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
-        })
-        console.log(response.token)
-        response.token.token = token
-        const userData: User = {
-            token: response.token,
-            id: response.id,
-            fullName: response.fullName,
-            email: response.email,
-            created_at: response.createdAt,
-            updated_at: response.updatedAt,
-        }
-        user.value = userData
-        // if(response.message){
-        //     throw new Error(response.message)
-        // }
+    async function fetchUserWithToken(token){
     }
 
     return {
         login,
         logout,
         fetchUserWithToken,
-        user: skipHydrate(user),
+        user,
     }
 })

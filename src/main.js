@@ -4,6 +4,8 @@ import piniaPersist from 'pinia-plugin-persist'
 import PrimeVue from 'primevue/config'
 import Tooltip from 'primevue/tooltip';
 import Aura from '@primevue/themes/aura';
+import './assets/main.css'
+import ToastService from 'primevue/toastservice';
 
 
 import App from './App.vue'
@@ -24,6 +26,8 @@ app.use(PrimeVue, {
             cssLayer: false}
     }
 })
+app.use(ToastService);
+
 
 app.directive('tooltip', Tooltip);
 

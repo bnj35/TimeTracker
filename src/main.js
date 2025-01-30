@@ -2,9 +2,12 @@ import'./assets/main.css';
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import piniaPersist from 'pinia-plugin-persist'
 import PrimeVue from 'primevue/config'
 import Tooltip from 'primevue/tooltip';
 import Aura from '@primevue/themes/aura';
+import './assets/main.css'
+import ToastService from 'primevue/toastservice';
 
 
 import App from './App.vue'
@@ -13,7 +16,9 @@ import { updatePrimaryPalette } from '@primevue/themes';
 
 const app = createApp(App)
 
-app.use(createPinia())
+const pinia = createPinia()
+pinia.use(piniaPersist)
+app.use(pinia)
 app.use(router)
 app.use(PrimeVue, {
     theme: {
@@ -24,6 +29,8 @@ app.use(PrimeVue, {
             cssLayer: false}
     }
 })
+app.use(ToastService);
+
 
 app.directive('tooltip', Tooltip);
 

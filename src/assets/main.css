@@ -1,0 +1,42 @@
+body{
+    margin:0;
+    padding:0;
+    font-family: 'Roboto', sans-serif;
+    background-image: url("https://primefaces.org/cdn/primevue/images/dock/window.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    max-height: 100vh;
+    overflow: hidden;
+}
+
+.dock-demo > .dock-window {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+
+.dock-demo .p-menubar {
+    padding: 0;
+    border-radius: 0;
+}
+
+a{
+    text-decoration: none;
+    color: black;
+}
+
+.p-menubar-end i{
+    height: 100%;
+    padding-inline: 0.3rem;
+}
+
+.p-menubar-end i:last-child{
+    margin-right: 1rem;
+}
+
+.p-menubar-start i{
+    height: 100%;
+    margin-left: 1rem;
+}
+

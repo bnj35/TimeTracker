@@ -2,33 +2,36 @@
 import { defineStore } from 'pinia'
 import piniaPersist from 'pinia-plugin-persist';
 import {useAPI} from "@/composables/useAPI.js";
-import {ref} from "vue";
+import {ref, watch} from "vue";
+import {useLocalStorage} from "@vueuse/core";
 
 export const useUserStore = defineStore('user', () => {
 
     const api = useAPI()
 
-    const user = ref({
-        name: '',
-        mail: '',
-        token: '',
-    })
-
-
+    const user = ref(
+        useLocalStorage('user', {
+            name: '',
+            mail: '',
+            token: '',
+        })
+    )
 
     async function login(name, mail){
-
-        const response = await api.post('/api/apikeys', {
-            name: name,
-            email: mail,
-        })
-        // if the response is successful, set the user token
-        if (!response.error) {
-            user.value.mail = response.data.email;
-            user.value.name = response.data.name;
-            user.value.token = response.data.key;
+        try {
+            const response = await api.post('/api/apikeys', {
+                name: name,
+                email: mail,
+            })
+            if (!response.error) {
+                user.value.mail = response.data.email;
+                user.value.name = response.data.name;
+                user.value.token = response.data.key;
+            }
+            return  response
+        }catch (error){
+            throw new Error(error)
         }
-        return  response
     }
 
     async function logout(){
@@ -44,4 +47,6 @@ export const useUserStore = defineStore('user', () => {
         fetchUserWithToken,
         user,
     }
+},{
+    persist: true,
 })

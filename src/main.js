@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import { createApp, watch} from 'vue'
 import { createPinia } from 'pinia'
 import piniaPersist from 'pinia-plugin-persist'
 import PrimeVue from 'primevue/config'
@@ -14,7 +14,6 @@ import router from './router'
 const app = createApp(App)
 
 const pinia = createPinia()
-pinia.use(piniaPersist)
 app.use(pinia)
 app.use(router)
 app.use(PrimeVue, {
@@ -26,6 +25,20 @@ app.use(PrimeVue, {
             cssLayer: false}
     }
 })
+
+//make user store persistent
+// if (localStorage.getItem('userState')) {
+//     pinia.state.value.user = JSON.parse(localStorage.getItem('userState'));
+// }
+//
+// watch(
+//     ()=> pinia.state.value.user,
+//     (value) => {
+//         localStorage.setItem('userState', JSON.stringify(value));
+//     },
+//     {deep: true}
+// );
+
 app.use(ToastService);
 
 

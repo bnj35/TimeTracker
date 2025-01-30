@@ -29,16 +29,11 @@ const initialValues = ref({
 
 const onFormSubmit = async () => {
   try {
-    console.log('Form submitted');
-    const response = await userStore.login(initialValues.value.username, initialValues.value.mail);
-    if (response.error){
-      toast.add({severity:'error', summary: 'Error', detail: response.error.message, life: 3000});
-    } else {
-      toast.add({severity:'success', summary: 'Success', detail: 'Login successful', life: 3000});
-    }
+    await userStore.login(initialValues.value.username, initialValues.value.mail);
+    toast.add({severity:'success', summary: 'Success', detail: 'Login successful', life: 3000});
   } catch (error) {
-    toast.add({severity:'error', summary: 'Error', detail: 'Error during form submission', life: 3000});
     console.error('Error during form submission:', error);
+    toast.add({severity:'error', summary: 'Error', detail: error.message, life: 3000});
   }
 };
 
@@ -46,7 +41,7 @@ const onFormSubmit = async () => {
 </script>
 
 <template>
-  <Panel class="w-sm flex items-center flex-col" header="Login">
+  <Panel class="w-sm flex items-center flex-col" header="Register">
     <Fluid>
       <Form v-slot="$form" :resolver="resolver" :initialValues @submit="onFormSubmit" class="flex flex-col gap-4 w-full sm:w-56">
           <div class="flex flex-col gap-1">
@@ -63,7 +58,7 @@ const onFormSubmit = async () => {
             </FloatLabel>
             <Message v-if="$form.email?.invalid" severity="error" size="small" variant="simple">{{ $form.mail.error?.message }}</Message>
           </div>
-          <Button type="submit" severity="secondary" label="Login" />
+          <Button type="submit" severity="primary" label="Login" />
       </Form>
     </Fluid>
   </Panel>

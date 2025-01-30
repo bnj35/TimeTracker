@@ -1,6 +1,7 @@
 <script setup>
 import RegisterForm from "@/components/RegisterForm.vue";
 import {useUserStore} from "@/stores/userStore.js";
+import LoginForm from "@/components/LoginForm.vue";
 
 const userStore = useUserStore();
 
@@ -11,6 +12,7 @@ const userStore = useUserStore();
     {{ userStore.user.mail }}
     {{ userStore.user.username }}
     <RegisterForm />
+    <LoginForm />
 
 
   </main>

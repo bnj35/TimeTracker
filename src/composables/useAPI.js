@@ -18,15 +18,15 @@ export function useAPI() {
         }
     });
 
-    api.interceptors.response.use(
-        response => response,
-        error => {
-            if (error.response && error.response.status === 401) {
-                router.push('/login').then(r => r);
-            }
-            return Promise.reject(error);
-        }
-    );
+    // api.interceptors.response.use(
+    //     response => response,
+    //     error => {
+    //         if (error.response && error.response.status === 401) {
+    //             router.push('/login').then(r => r);
+    //         }
+    //         return Promise.reject(error);
+    //     }
+    // );
 
     return api;
 }

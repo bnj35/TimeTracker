@@ -34,8 +34,30 @@ export const useUserStore = defineStore('user', () => {
         }
     }
 
-    async function logout(){
+    async function loginWithToken(token){
+        try {
+            user.value.token = token;
+            const response = await api.get('/api/profile',{
+                headers: {
+                    "Authorization": `key=${token}`
+                }
+            })
+            if (!response.error) {
+                user.value.mail = response.data.email;
+                user.value.name = response.data.name;
+            }
+            return response
+        }catch (error){
+            user.value.token = '';
+            throw new Error(error)
+        }
 
+    }
+
+    async function logout(){
+        user.value.token = '';
+        user.value.mail = '';
+        user.value.name = '';
     }
 
     async function fetchUserWithToken(token){
@@ -43,6 +65,7 @@ export const useUserStore = defineStore('user', () => {
 
     return {
         login,
+        loginWithToken,
         logout,
         fetchUserWithToken,
         user,

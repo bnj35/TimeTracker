@@ -23,12 +23,13 @@ const resolver = (values) => {
 };
 
 const initialValues = ref({
-  token: '',
+  username: '',
+  mail: ''
 });
 
 const onFormSubmit = async () => {
   try {
-    await userStore.loginWithToken(initialValues.value.token);
+    await userStore.login(initialValues.value.username, initialValues.value.mail);
     toast.add({severity:'success', summary: 'Success', detail: 'Login successful', life: 3000});
   } catch (error) {
     console.error('Error during form submission:', error);
@@ -40,17 +41,24 @@ const onFormSubmit = async () => {
 </script>
 
 <template>
-  <Panel class="w-sm flex items-center flex-col" header="Login">
+  <Panel class="w-sm flex items-center flex-col" header="Register">
     <Fluid>
       <Form v-slot="$form" :resolver="resolver" :initialValues @submit="onFormSubmit" class="flex flex-col gap-4 w-full sm:w-56">
           <div class="flex flex-col gap-1">
             <FloatLabel variant="on">
-              <InputText id="on_label" v-model="initialValues.token" />
-              <label for="on_label">Clé d'Api</label>
+              <InputText id="on_label" v-model="initialValues.username" />
+              <label for="on_label">Username</label>
             </FloatLabel>
-            <Message v-if="$form.token?.invalid" severity="error" size="small" variant="simple">{{ $form.username.error?.message }}</Message>
+            <Message v-if="$form.username?.invalid" severity="error" size="small" variant="simple">{{ $form.username.error?.message }}</Message>
           </div>
-          <Button type="submit" severity="primary" label="S'identifier" />
+          <div class="flex flex-col gap-1">
+            <FloatLabel variant="on">
+              <InputText id="on_label" v-model="initialValues.mail" />
+              <label for="on_label">Email</label>
+            </FloatLabel>
+            <Message v-if="$form.email?.invalid" severity="error" size="small" variant="simple">{{ $form.mail.error?.message }}</Message>
+          </div>
+          <Button type="submit" severity="primary" label="Créer un compte" />
       </Form>
     </Fluid>
   </Panel>

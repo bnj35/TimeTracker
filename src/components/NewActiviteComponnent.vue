@@ -5,9 +5,9 @@ import { Form } from '@primevue/forms';
 import InputText from 'primevue/inputtext';
 import ColorPicker from 'primevue/colorpicker';
 import Button from 'primevue/button';
-import { useAPI } from '@/composables/useAPI';
 import { useActivityStore } from '@/stores/activityStore';
 import { useToast } from 'primevue/usetoast';
+
 
 const toast = useToast();
 
@@ -33,6 +33,7 @@ const createActivity = async () => {
         } else {
             toast.add({severity:'success', summary: 'Success', detail: 'Activity created', life: 3000});
             console.log('Activity created:', response.data);
+            activityStore.fetchActivities();
         }
 
     }
@@ -40,7 +41,6 @@ const createActivity = async () => {
         toast.add({severity:'error', summary: 'Error', detail: 'Error during form submission', life: 3000});
         console.error('Error during form submission:', e);
     }
-
 };
 
 

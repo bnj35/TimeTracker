@@ -32,10 +32,16 @@ export const useActivityStore = defineStore('activity', () => {
         return response
     }
 
-    async function modifyActivity(id){
-        const response = await api.put('/api/activities/' + id)
+    async function modifyActivity(id, name, color){
+        const response = await api.put('/api/activities/' + id, {
+            name: name,
+            color: color,
+        })
         if (!response.error) {
-            activities.value = activities.value.filter(activity => activity.id !== id);
+            const index = activities.value.findIndex(activity => activity.id === id);
+            if (index !== -1) {
+                activities.value[index] = response.data;
+            }
         }
         return response
     }

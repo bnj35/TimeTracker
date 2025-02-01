@@ -12,7 +12,6 @@ import ToastService from 'primevue/toastservice';
 
 import App from './App.vue'
 import router from './router'
-import { updatePrimaryPalette } from '@primevue/themes';
 
 const app = createApp(App)
 
@@ -29,9 +28,8 @@ app.use(PrimeVue, {
             cssLayer: false}
     }
 })
+
 app.use(ToastService);
-
-
 app.directive('tooltip', Tooltip);
 
 app.mount('#app')

@@ -41,6 +41,8 @@ const createActivity = async () => {
         toast.add({severity:'error', summary: 'Error', detail: 'Error during form submission', life: 3000});
         console.error('Error during form submission:', e);
     }
+
+    activityStore.fetchActivities();
 };
 
 

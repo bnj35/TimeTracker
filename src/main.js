@@ -22,7 +22,8 @@ app.use(PrimeVue, {
         options: { 
             prefix: 'p',
             darkModeSelector:'system',
-            cssLayer: false}
+            cssLayer: false
+        }
     }
 })
 

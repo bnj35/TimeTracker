@@ -48,7 +48,7 @@ const onFormSubmit = async () => {
               <InputText id="on_label" v-model="initialValues.token" />
               <label for="on_label">Clé d'Api</label>
             </FloatLabel>
-            <Message v-if="$form.token?.invalid" severity="error" size="small" variant="simple">{{ $form.username.error?.message }}</Message>
+            <Message v-if="$form.token?.invalid" severity="error" size="small" variant="simple">{{ $form.token.error?.message }}</Message>
           </div>
           <Button type="submit" severity="primary" label="S'identifier" />
       </Form>

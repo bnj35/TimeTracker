@@ -42,7 +42,7 @@ export const useObjectiveStore = defineStore('objectives', () => {
     }
 
     //function to update an objective status
-    async function update(id, status){
+    async function updateObjectiveStatus(id, status){
         if (status === true || status === 1){
             try {
                 const response = await api.patch(`/api/daily-objectives/${id}/done`)
@@ -58,7 +58,25 @@ export const useObjectiveStore = defineStore('objectives', () => {
                 throw new Error(error)
             }
         }
+    }
 
+    async function update(id, objective){
+        try {
+            const response = await api.put(`/api/daily-objectives/${id}`, {
+                name: objective.name,
+                content: objective.content,
+            })
+            objectives.value = objectives.value.map(objective => {
+                if (objective.id === id){
+                    objective.name = response.data.name
+                    objective.content = response.data.content
+                }
+                return objective
+            })
+            return  response
+        }catch (error){
+            throw new Error(error)
+        }
     }
 
     async function deleteObjective(id){
@@ -82,6 +100,7 @@ export const useObjectiveStore = defineStore('objectives', () => {
         fetch,
         create,
         update,
+        updateObjectiveStatus,
         deleteObjective,
     }
 })

@@ -3,11 +3,12 @@ import {ref} from "vue";
 import {computed} from "vue";
 import Checkbox from "primevue/checkbox";
 import Button from "primevue/button";
-import Popover from 'primevue/popover';
 import Menu from 'primevue/menu';
 import {useObjectiveStore} from "@/stores/objectivesStore.js";
+import Dialog from "primevue/dialog";
 
 import 'primeicons/primeicons.css'
+import DailyObjectiveForm from "@/components/DailyObjectif/DailyObjectiveForm.vue";
 const props = defineProps(["objectif"]);
 const objectiveStore = useObjectiveStore();
 
@@ -38,7 +39,18 @@ const deleteObjective = () => {
   objectiveStore.deleteObjective(props.objectif.id);
 };
 
+const dialogVisible = ref(false);
+
+const openEditDialog = () => {
+  dialogVisible.value = true;
+};
+
 const items = [
+  {
+    label: 'Edit',
+    icon: 'pi pi-pencil',
+    command: openEditDialog
+  },
   {
     label: 'Delete',
     icon: 'pi pi-trash',
@@ -51,6 +63,7 @@ const menu = ref(null);
 const toggle = (event) => {
   menu.value.toggle(event);
 };
+
 
 </script>
 
@@ -72,8 +85,11 @@ const toggle = (event) => {
 <!--      <Menu :model="items" ref="menu" class="!border-0 !p-0" />-->
 <!--    </Popover>-->
 
-    <Button type="button" icon="pi pi-ellipsis-v" severity="secondary" @click="toggle" aria-haspopup="true" aria-controls="overlay_menu" />
+    <Button type="button" icon="pi pi-ellipsis-v" severity="secondary" size="small" @click="toggle" aria-haspopup="true" aria-controls="overlay_menu" class="!aspect-square !p-1 !text-xs" />
     <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
+    <Dialog v-model:visible="dialogVisible" modal>
+      <DailyObjectiveForm :objectif="props.objectif" @submit="dialogVisible = false" />
+    </Dialog>
   </div>
 </template>
 

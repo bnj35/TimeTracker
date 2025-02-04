@@ -6,6 +6,7 @@ import {useAPI} from "@/composables/useAPI.js";
 import Objective from "@/components/DailyObjectif/Objective.vue";
 import { useObjectiveStore } from "@/stores/objectivesStore.js";
 import {useToast} from "primevue/usetoast";
+import DailyObjectiveForm from "@/components/DailyObjectif/DailyObjectiveForm.vue";
 
 const objectiveStore = useObjectiveStore();
 const toast = useToast();
@@ -19,11 +20,17 @@ onMounted(async () => {
 
 const updateObjectiveStatus = async ({ id, done }) => {
   try {
-    await objectiveStore.update(id, done ? 1 : 0);
+    await objectiveStore.updateObjectiveStatus(id, done ? 1 : 0);
   } catch (error) {
     toast.add({severity:'error', summary: 'Error', detail: error.message, life: 3000});
     console.error(`Failed to update objective ${id}:`, error);
   }
+};
+
+const dialogVisible = ref(false);
+
+const openEditDialog = () => {
+  dialogVisible.value = true;
 };
 
 </script>

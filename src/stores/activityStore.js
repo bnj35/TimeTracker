@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-// import piniaPersist from 'pinia-plugin-persist';
 import {useAPI} from "@/composables/useAPI.js";
 import {ref} from "vue";
 
@@ -61,7 +60,7 @@ export const useActivityStore = defineStore('activity', () => {
         }
         return response
     }
-    
+
     return {
         fetchActivities,
         addActivity,

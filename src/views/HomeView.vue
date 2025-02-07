@@ -1,22 +1,65 @@
 <script setup>
+import { ref, onMounted } from 'vue';
 import NavbarComponnent from '@/components/NavbarComponnent.vue';
 import NewActiviteComponnent from '@/components/NewActiviteComponnent.vue';
 import GetActiviteComponnent from '@/components/GetActiviteComponnent.vue';
 import GetProjectsComponnent from '@/components/GetProjectsComponnent.vue';
 import NewProjectsComponent from '@/components/NewProjectsComponent.vue';
+import { useMoveWidget } from '@/composables/moveWidget.js';
+import { useWidgetStore } from '@/stores/widgetStore.js';
 
+const { onMouseDown } = useMoveWidget();
+const widgetStore = useWidgetStore();
+
+const newActiviteRef = ref(null);
+const getActiviteRef = ref(null);
+const getProjectsRef = ref(null);
+const newProjectsRef = ref(null);
+
+const setRandomPosition = (element, widgetId) => {
+  if (!element) return;
+  const widget = widgetStore.widgets.find(w => w.id === widgetId);
+  if (widget) {
+    element.style.left = `${widget.left}px`;
+    element.style.top = `${widget.top}px`;
+element.style.zIndex = widget.zIndex;
+  } else {
+    const x = Math.random() * (window.innerWidth - element.offsetWidth);
+    const y = Math.random() * (window.innerHeight - element.offsetHeight);
+    element.style.left = `${x}px`;
+    element.style.top = `${y}px`;
+element.style.zIndex = widgetStore.zIndexCounter.value;
+    widgetStore.addWidget({ id: widgetId, left: x, top: y, zIndex: widgetStore.zIndexCounter.value });
+    widgetStore.zIndexCounter.value++;
+  }
+};
+
+onMounted(() => {
+  if (newActiviteRef.value) setRandomPosition(newActiviteRef.value, 'newActivite');
+  if (getActiviteRef.value) setRandomPosition(getActiviteRef.value, 'getActivite');
+  if (getProjectsRef.value) setRandomPosition(getProjectsRef.value, 'getProjects');
+  if (newProjectsRef.value) setRandomPosition(newProjectsRef.value, 'newProjects');
+});
 </script>
 
 <template>
   <NavbarComponnent />
-  <div class="flex row w-full items-center justify-center gap-4 ">
-  <NewActiviteComponnent />
-  <GetActiviteComponnent />
-  <GetProjectsComponnent />
-  <NewProjectsComponent />
-</div>
-
+  <div class="h-full w-full relative">
+    <div ref="newActiviteRef" @mousedown="onMouseDown($event, $event.target)" class="w-fit absolute bg-gray-200 pt-4 cursor-move rounded-md">
+      <NewActiviteComponnent />
+    </div>
+    <div ref="getActiviteRef" @mousedown="onMouseDown($event,$event.target )" class="w-fit absolute bg-gray-200 pt-4 cursor-move rounded-md">
+      <GetActiviteComponnent />
+    </div>
+    <div ref="getProjectsRef" @mousedown="onMouseDown($event, $event.target)" class="w-fit absolute bg-gray-200 pt-4 cursor-move rounded-md">
+      <GetProjectsComponnent />
+    </div>
+    <div ref="newProjectsRef" @mousedown="onMouseDown($event,$event.target )" class="w-fit absolute bg-gray-200 pt-4 cursor-move rounded-md">
+      <NewProjectsComponent />
+    </div>
+  </div>
   <main>
 
   </main>
 </template>
+

@@ -10,7 +10,6 @@ import Button from 'primevue/button';
 import Toast from 'primevue/toast';
 import Panel from 'primevue/panel';
 import ColorPicker from 'primevue/colorpicker';
-import ToggleSwitch from 'primevue/toggleswitch';
 
 const toast = useToast();
 
@@ -49,6 +48,21 @@ const closeActivity = async (id) => {
     }
 };
 
+const openActivity = async (id) => {
+    try {
+        const response = await activityStore.openActivity(id);
+        if (response.error) {
+            toast.add({ severity: 'error', summary: 'Error', detail: response.error.message, life: 3000 });
+        } else {
+            toast.add({ severity: 'success', summary: 'Success', detail: 'Activity opened', life: 3000 });
+            GetActivity();
+        }
+    } catch (e) {
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Error during form submission', life: 3000 });
+        console.error('Error during form submission:', e);
+    }
+};
+
 const modifyActivity = async () => {
     try {
         const response = await activityStore.modifyActivity(selectedActivity.value.id, selectedActivity.value.name, selectedActivity.value.color);
@@ -70,9 +84,6 @@ const openModifyDialog = (activity) => {
     visibleModifyDialog.value = true;
 };
 
-// const filteredActivities = computed(() => {
-//     return activities.value.filter(activity => activity.is_enabled);
-// });
 
 onMounted(() => {
     GetActivity();
@@ -99,11 +110,7 @@ onMounted(() => {
                     <Button @click="() => openModifyDialog(data)" label="modifier" type="button" />
                 </template>
             </Column>
-            <Column field="id" header="Action">
-                <template #body="{ data }">
-                    <Button @click="closeActivity(data.id)" label="❌" type="button" />
-                </template>
-            </Column>
+            
             <Column field="is_enabled" header="state">
                 <template #body="{ data }">
                     <span v-if="data.is_enabled" class="text-green-500">Ouvert</span>
@@ -122,12 +129,16 @@ onMounted(() => {
                     <label for="color" class="font-semibold w-24">Color</label>
                     <ColorPicker id="color" v-model="selectedActivity.color" class="flex-auto" autocomplete="off" />
                 </div>
-                <div class="flex items-center gap-4 mb-8">
-                    <label for="is_enabled" class="font-semibold w-24">Statut</label>
-                    <ToggleSwitch id="is_enabled" v-model="selectedActivity.is_enabled" />
+                <div v-if="selectedActivity.is_enabled" class="flex items-center gap-4 mb-8">
+                    <label for="is_enabled" class="font-semibold w-24">Desacctiver</label>
+                    <Button type="button" label="Fermer" @click="() => closeActivity(selectedActivity.id)"></Button>
+                </div>
+                <div v-else class="flex items-center gap-4 mb-8">
+                    <label for="is_enabled" class="font-semibold w-24">Activer</label>
+                    <Button type="button" label="Ouvrir" @click="() => openActivity(selectedActivity.id)"></Button>
                 </div>
                 <div class="flex justify-end gap-2">
-                    <Button type="button" label="Cancel" severity="secondary" @click="visibleModifyDialog.value = false"></Button>
+                    <Button type="button" label="Cancel" severity="secondary" @click="visibleModifyDialog = false"></Button>
                     <Button type="button" label="Save" @click="modifyActivity"></Button>
                 </div>
             </div>

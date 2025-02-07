@@ -54,11 +54,20 @@ export const useActivityStore = defineStore('activity', () => {
         return response
     }
 
+    async function openActivity(id){
+        const response = await api.patch('/api/activities/' + id+ '/enable')
+        if (!response.error) {
+            activities.value = activities.value.filter(activity => activity.id !== id);
+        }
+        return response
+    }
+    
     return {
         fetchActivities,
         addActivity,
         modifyActivity,
         closeActivity,
+        openActivity,
         activities,
     }
 }

@@ -1,5 +1,5 @@
-import { ref } from 'vue';
-import { useWidgetStore } from '@/stores/widgetStore.js';
+import { ref } from "vue";
+import { useWidgetStore } from "@/stores/widgetStore.js";
 
 export function useMoveWidget() {
   const isDragging = ref(false);
@@ -11,7 +11,7 @@ export function useMoveWidget() {
 
   const onMouseDown = (event, widget) => {
     if (!widget) {
-      console.error('Widget is undefined');
+      console.error("Widget is undefined");
       return;
     }
     isDragging.value = true;
@@ -21,24 +21,36 @@ export function useMoveWidget() {
     widgetStartY.value = widget.offsetTop;
     widgetStore.bringToFront(widget);
     widget.style.zIndex = widgetStore.zIndexCounter.value;
-    widgetStore.zIndexCounterÒ++;
+    widgetStore.zIndexCounter++;
     const onMouseMove = (event) => {
       if (!isDragging.value) return;
       const deltaX = event.clientX - dragStartX.value;
       const deltaY = event.clientY - dragStartY.value;
-      const newLeft = Math.max(0, Math.min(widgetStartX.value + deltaX, window.innerWidth - widget.offsetWidth));
-      const newTop = Math.max(0, Math.min(widgetStartY.value + deltaY, window.innerHeight - widget.offsetHeight));
+      const newLeft = Math.max(
+        0,
+        Math.min(
+          widgetStartX.value + deltaX,
+          window.innerWidth - widget.offsetWidth
+        )
+      );
+      const newTop = Math.max(
+        0,
+        Math.min(
+          widgetStartY.value + deltaY,
+          window.innerHeight - widget.offsetHeight
+        )
+      );
       widget.style.left = `${newLeft}px`;
       widget.style.top = `${newTop}px`;
       widgetStore.updateWidgetPosition(widget, newLeft, newTop);
     };
     const onMouseUp = () => {
       isDragging.value = false;
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseup", onMouseUp);
     };
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
+    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseup", onMouseUp);
   };
 
   return {

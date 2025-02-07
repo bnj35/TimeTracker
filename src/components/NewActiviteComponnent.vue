@@ -26,19 +26,19 @@ const values = ref({
 });
 
 const createActivity = async () => {
-    try{
+    try {
         const response = await activityStore.addActivity(values.value.name, values.value.color);
-        if (response.error){
-            toast.add({severity:'error', summary: 'Error', detail: response.error.message, life: 3000});
+        if (response.error) {
+            toast.add({ severity: 'error', summary: 'Error', detail: response.error.message, life: 3000 });
         } else {
-            toast.add({severity:'success', summary: 'Success', detail: 'Activity created', life: 3000});
+            toast.add({ severity: 'success', summary: 'Success', detail: 'Activity created', life: 3000 });
             console.log('Activity created:', response.data);
             activityStore.fetchActivities();
         }
 
     }
-    catch(e){
-        toast.add({severity:'error', summary: 'Error', detail: 'Error during form submission', life: 3000});
+    catch (e) {
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Error during form submission', life: 3000 });
         console.error('Error during form submission:', e);
     }
 
@@ -51,18 +51,18 @@ const createActivity = async () => {
 
 
 <template>
-        <Panel header="Nouvelle Activité">
-            <Form @submit="createActivity" :resolver="resolver" :initialValues="values">
-                <div class="p-fluid">
-                    <div class="p-field">
-                        <InputText id="nom" type="text" v-model="values.name" placeholder="Nom" required="" />
-                    </div>
-                    <div class="p-field">
-                        <label for="Color">Color Picker</label>
-                            <ColorPicker id="Color" v-model="values.color" />
-                    </div>
-                    <Button label="Créer" type="submit"/>
+    <Panel header="Nouvelle Activité">
+        <Form @submit="createActivity" :resolver="resolver" :initialValues="values">
+            <div class="p-fluid">
+                <div class="p-field">
+                    <InputText id="nom" type="text" v-model="values.name" placeholder="Nom" required="" />
                 </div>
-            </Form>
-        </Panel>
+                <div class="p-field">
+                    <label for="Color">Color Picker</label>
+                    <ColorPicker id="Color" v-model="values.color" />
+                </div>
+                <Button label="Créer" type="submit" />
+            </div>
+        </Form>
+    </Panel>
 </template>

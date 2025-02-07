@@ -101,7 +101,7 @@ onMounted(() => {
                     <Button @click="() => openModifyDialog(data)" label="modifier" type="button" />
                 </template>
             </Column>
-            
+
             <Column field="is_enabled" header="state">
                 <template #body="{ data }">
                     <span v-if="data.is_enabled" class="text-green-500">Ouvert</span>
@@ -118,7 +118,8 @@ onMounted(() => {
                 </div>
                 <div class="flex items-center gap-4 mb-8">
                     <label for="description" class="font-semibold w-24">Description</label>
-                    <InputText id="description" v-model="selectedProjects.description" class="flex-auto" autocomplete="off" />
+                    <InputText id="description" v-model="selectedProjects.description" class="flex-auto"
+                        autocomplete="off" />
                 </div>
                 <div v-if="selectedProjects.is_enabled" class="flex items-center gap-4 mb-8">
                     <label for="is_enabled" class="font-semibold w-24">Desacctiver</label>
@@ -129,7 +130,8 @@ onMounted(() => {
                     <Button type="button" label="Ouvrir" @click="() => openProjects(selectedProjects.id)"></Button>
                 </div>
                 <div class="flex justify-end gap-2">
-                    <Button type="button" label="Cancel" severity="secondary" @click="visibleModifyDialog = false"></Button>
+                    <Button type="button" label="Cancel" severity="secondary"
+                        @click="visibleModifyDialog = false"></Button>
                     <Button type="button" label="Save" @click="modifyProjects"></Button>
                 </div>
             </div>

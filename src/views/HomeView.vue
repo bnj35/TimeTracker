@@ -22,13 +22,13 @@ const setRandomPosition = (element, widgetId) => {
   if (widget) {
     element.style.left = `${widget.left}px`;
     element.style.top = `${widget.top}px`;
-element.style.zIndex = widget.zIndex;
+    element.style.zIndex = widget.zIndex;
   } else {
     const x = Math.random() * (window.innerWidth - element.offsetWidth);
     const y = Math.random() * (window.innerHeight - element.offsetHeight);
     element.style.left = `${x}px`;
     element.style.top = `${y}px`;
-element.style.zIndex = widgetStore.zIndexCounter.value;
+    element.style.zIndex = widgetStore.zIndexCounter.value;
     widgetStore.addWidget({ id: widgetId, left: x, top: y, zIndex: widgetStore.zIndexCounter.value });
     widgetStore.zIndexCounter.value++;
   }
@@ -45,16 +45,20 @@ onMounted(() => {
 <template>
   <NavbarComponnent />
   <div class="h-full w-full relative">
-    <div ref="newActiviteRef" @mousedown="onMouseDown($event, $event.target)" class="w-fit absolute bg-gray-200 pt-4 cursor-move rounded-md">
+    <div ref="newActiviteRef" @mousedown="onMouseDown($event, $event.target)"
+      class="w-fit absolute bg-gray-200 pt-4 cursor-move rounded-md">
       <NewActiviteComponnent />
     </div>
-    <div ref="getActiviteRef" @mousedown="onMouseDown($event,$event.target )" class="w-fit absolute bg-gray-200 pt-4 cursor-move rounded-md">
+    <div ref="getActiviteRef" @mousedown="onMouseDown($event, $event.target)"
+      class="w-fit absolute bg-gray-200 pt-4 cursor-move rounded-md">
       <GetActiviteComponnent />
     </div>
-    <div ref="getProjectsRef" @mousedown="onMouseDown($event, $event.target)" class="w-fit absolute bg-gray-200 pt-4 cursor-move rounded-md">
+    <div ref="getProjectsRef" @mousedown="onMouseDown($event, $event.target)"
+      class="w-fit absolute bg-gray-200 pt-4 cursor-move rounded-md">
       <GetProjectsComponnent />
     </div>
-    <div ref="newProjectsRef" @mousedown="onMouseDown($event,$event.target )" class="w-fit absolute bg-gray-200 pt-4 cursor-move rounded-md">
+    <div ref="newProjectsRef" @mousedown="onMouseDown($event, $event.target)"
+      class="w-fit absolute bg-gray-200 pt-4 cursor-move rounded-md">
       <NewProjectsComponent />
     </div>
   </div>
@@ -62,4 +66,3 @@ onMounted(() => {
 
   </main>
 </template>
-

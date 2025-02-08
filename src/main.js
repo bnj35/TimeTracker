@@ -1,6 +1,5 @@
 import'./assets/main.css';
-
-import { createApp } from 'vue'
+import { createApp, watch} from 'vue'
 import { createPinia } from 'pinia'
 import piniaPersist from 'pinia-plugin-persist'
 import PrimeVue from 'primevue/config'
@@ -25,10 +24,10 @@ app.use(PrimeVue, {
         options: { 
             prefix: 'p',
             darkModeSelector:'system',
-            cssLayer: false}
+            cssLayer: false
+        }
     }
 })
-
 app.use(ToastService);
 app.directive('tooltip', Tooltip);
 

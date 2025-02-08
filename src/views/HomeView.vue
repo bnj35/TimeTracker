@@ -62,7 +62,4 @@ onMounted(() => {
       <NewProjectsComponent />
     </div>
   </div>
-  <main>
-
-  </main>
 </template>

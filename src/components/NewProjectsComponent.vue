@@ -26,19 +26,19 @@ const values = ref({
 });
 
 const createProjects = async () => {
-    try{
+    try {
         const response = await projectsStore.addProjects(values.value.name, values.value.description);
-        if (response.error){
-            toast.add({severity:'error', summary: 'Error', detail: response.error.message, life: 3000});
+        if (response.error) {
+            toast.add({ severity: 'error', summary: 'Error', detail: response.error.message, life: 3000 });
         } else {
-            toast.add({severity:'success', summary: 'Success', detail: 'Projects created', life: 3000});
+            toast.add({ severity: 'success', summary: 'Success', detail: 'Projects created', life: 3000 });
             console.log('Projects created:', response.data);
             projectsStore.fetchProjects();
         }
 
     }
-    catch(e){
-        toast.add({severity:'error', summary: 'Error', detail: 'Error during form submission', life: 3000});
+    catch (e) {
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Error during form submission', life: 3000 });
         console.error('Error during form submission:', e);
     }
 
@@ -51,17 +51,17 @@ const createProjects = async () => {
 
 
 <template>
-        <Panel header="Nouveaux Projets">
-            <Form @submit="createProjects" :resolver="resolver" :initialValues="values">
-                <div class="p-fluid">
-                    <div class="p-field">
-                        <InputText id="nom" type="text" v-model="values.name" placeholder="Nom" required="" />
-                    </div>
-                    <div class="p-field">
-                        <InputText id="description" type="text" v-model="values.description" placeholder="Description" />
-                    </div>
-                    <Button label="Créer" type="submit"/>
+    <Panel header="Nouveaux Projets">
+        <Form @submit="createProjects" :resolver="resolver" :initialValues="values">
+            <div class="p-fluid">
+                <div class="p-field">
+                    <InputText id="nom" type="text" v-model="values.name" placeholder="Nom" required="" />
                 </div>
-            </Form>
-        </Panel>
+                <div class="p-field">
+                    <InputText id="description" type="text" v-model="values.description" placeholder="Description" />
+                </div>
+                <Button label="Créer" type="submit" />
+            </div>
+        </Form>
+    </Panel>
 </template>

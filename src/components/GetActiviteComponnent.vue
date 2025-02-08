@@ -110,7 +110,7 @@ onMounted(() => {
                     <Button @click="() => openModifyDialog(data)" label="modifier" type="button" />
                 </template>
             </Column>
-            
+
             <Column field="is_enabled" header="state">
                 <template #body="{ data }">
                     <span v-if="data.is_enabled" class="text-green-500">Ouvert</span>
@@ -138,7 +138,8 @@ onMounted(() => {
                     <Button type="button" label="Ouvrir" @click="() => openActivity(selectedActivity.id)"></Button>
                 </div>
                 <div class="flex justify-end gap-2">
-                    <Button type="button" label="Cancel" severity="secondary" @click="visibleModifyDialog = false"></Button>
+                    <Button type="button" label="Cancel" severity="secondary"
+                        @click="visibleModifyDialog = false"></Button>
                     <Button type="button" label="Save" @click="modifyActivity"></Button>
                 </div>
             </div>

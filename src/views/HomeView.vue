@@ -29,8 +29,8 @@ const setRandomPosition = (element, widgetId) => {
     element.style.left = `${x}px`;
     element.style.top = `${y}px`;
     element.style.zIndex = widgetStore.zIndexCounter.value;
-    widgetStore.addWidget({ id: widgetId, left: x, top: y, zIndex: widgetStore.zIndexCounter.value });
-    widgetStore.zIndexCounter.value++;
+    widgetStore.addWidget({ id: widgetId, left: x, top: y, zIndex: widgetStore.zIndexCounter });
+    widgetStore.zIndexCounter++;
   }
 };
 

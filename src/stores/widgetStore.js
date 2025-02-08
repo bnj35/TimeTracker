@@ -24,12 +24,6 @@ export const useWidgetStore = defineStore(
       if (index !== -1) {
         widgets.value[index].left = left;
         widgets.value[index].top = top;
-      }
-    }
-
-    function bringToFront(widget) {
-      const index = widgets.value.findIndex((w) => w.id === widget.id);
-      if (index !== -1) {
         widgets.value[index].zIndex = zIndexCounter.value++;
       }
     }
@@ -39,7 +33,6 @@ export const useWidgetStore = defineStore(
       addWidget,
       removeWidget,
       updateWidgetPosition,
-      bringToFront,
       zIndexCounter,
     };
   },

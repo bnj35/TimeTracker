@@ -19,8 +19,7 @@ export function useMoveWidget() {
     dragStartY.value = event.clientY;
     widgetStartX.value = widget.offsetLeft;
     widgetStartY.value = widget.offsetTop;
-    widgetStore.bringToFront(widget);
-    widget.style.zIndex = widgetStore.zIndexCounter.value;
+    widget.style.zIndex = widgetStore.zIndexCounter;
     widgetStore.zIndexCounter++;
     const onMouseMove = (event) => {
       if (!isDragging.value) return;

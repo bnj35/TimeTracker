@@ -13,6 +13,8 @@ import ColorPicker from 'primevue/colorpicker';
 
 const toast = useToast();
 
+
+
 const activityStore = useActivityStore();
 const activities = ref([]);
 const visibleModifyDialog = ref(false);
@@ -91,7 +93,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <Panel header="Vos activités">
+    <Panel header="Vos activités" toggleable>
         <Toast />
         <DataTable :value="activities" stripedRows :paginator="true" :rows="5" :rowsPerPageOptions="[5, 7, 10]">
             <Column field="name" header="Nom"></Column>

@@ -56,9 +56,14 @@ const toggleWindows = () => {
 <template>
   <NavbarComponnent />
   <button @click="toggleWindows">Toggle Projects</button>
+  <div v-for="widget in widgetStore.openWidgets" :key="widget.name">
+    {{ widget.componentEntry }}
+    <hr>
+    x: {{widget.x}} | y:{{widget.y}}
+  </div>
   <div class="h-full w-full relative">
-    <Window v-for="widget in widgetStore.openWidgets" :key="widget.name" :widgetName="widget.name" :widgetId="widget.id" :x="widget.left" :y="widget.top" :zIndex="widget.zIndex" :title="widget.title">
-      <component :is="widget.component" />
+    <Window v-for="widget in widgetStore.openWidgets" :key="widget.componentEntry.name" :widgetName="widget.componentEntry.name" :x="widget.x" :y="widget.y" :zIndex="widget.zIndex" :title="widget.title">
+      <component :is="widget.componentEntry.component" />
     </Window>
   </div>
 

@@ -1,54 +1,55 @@
 // src/stores/widgetStore.js
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import {ref, shallowRef} from "vue";
 import { useLocalStorage } from "@vueuse/core";
 
 export const useWidgetStore = defineStore(
     "widget",
     () => {
-        const openWidgets = useLocalStorage('widgets', []);
+        // const openWidgets = useLocalStorage('widgets', []);
+        const openWidgets = ref([]);
         const zIndexCounter = ref(0);
 
-        function toggleWidget(name, widget, defaultPosition = { x: 100, y: 100, width: 300, height: 200 }) {
-            const currentWidget = openWidgets.value.find(w => w.name === widget.name);
+        function toggleWidget(componentEntry, defaultPosition = { x: 100, y: 100, width: 300, height: 200 }) {
+            const currentWidget = openWidgets.value.find(w => w.name === componentEntry.name);
             if (currentWidget) {
                 removeWidget(currentWidget.name);
             } else {
-                addWidget(name, widget, defaultPosition);
+                addWidget(componentEntry, defaultPosition);
             }
         }
-
-        function addWidget(component, defaultPosition = { x: 100, y: 100, width: 300, height: 200 }) {
+        function addWidget(componentEntry, defaultPosition = { x: 100, y: 100, width: 300, height: 200 }) {
             if (!openWidgets.value.find(w => w.name === name)) {
                 const zIndex = Math.max(0, ...openWidgets.value.map(w => w.zIndex)) + 1;
-                openWidgets.value.push({ name: component.name, component: component.component, ...defaultPosition, zIndex });
+                openWidgets.value.push({ componentEntry: {name: componentEntry.name, component: componentEntry.component}, ...defaultPosition, zIndex });
             } else {
-                bringToFront(component.name);
+                bringToFront(componentEntry.name);
             }
         }
 
         function removeWidget(name) {
-            openWidgets.value = openWidgets.value.filter(w => w.name !== name);
+            openWidgets.value = openWidgets.value.filter(w => w.componentEntry.name !== name);
         }
 
         function bringToFront(name) {
             const maxZ = Math.max(0, ...openWidgets.value.map(w => w.zIndex)) + 1;
-            const window = openWidgets.value.find(w => w.name === name);
+            const window = openWidgets.value.find(w => w.componentEntry.name === name);
             if (window) window.zIndex = maxZ;
         }
 
-        function updateWidgetPosition(widget, left, top) {
-            const index = openWidgets.value.findIndex((w) => w.name === widget.name);
+        function updateWidgetPosition(name, left, top) {
+            const index = openWidgets.value.findIndex((w) => w.componentEntry.name === name);
+            console.log('👾 👾👾👾 ', index);
             if (index !== -1) {
-                openWidgets.value[index].left = left;
-                openWidgets.value[index].top = top;
+                openWidgets.value[index].x = left;
+                openWidgets.value[index].y = top;
                 openWidgets.value[index].zIndex = zIndexCounter.value++;
             }
         }
 
         function updateWidget(name, updates) {
-            const window = openWidgets.value.find(w => w.name === name);
-            if (window) Object.assign(window, updates);
+            const widget = openWidgets.value.find(w => w.componentEntry.name === name);
+            if (widget) Object.assign(widget, updates);
         }
 
         return {

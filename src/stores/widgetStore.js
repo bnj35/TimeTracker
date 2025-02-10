@@ -10,12 +10,16 @@ export const useWidgetStore = defineStore(
         const openWidgets = ref([]);
         const zIndexCounter = ref(0);
 
-        function toggleWidget(componentEntry, defaultPosition = { x: 100, y: 100, width: 300, height: 200 }) {
+        function getWidget(name) {
+            return openWidgets.value.find(w => w.componentEntry.name === name);
+        }
+
+        function toggleWidget(componentEntry,  { x= 100, y= 100, width= 300, height= 200 }) {
             const currentWidget = openWidgets.value.find(w => w.name === componentEntry.name);
             if (currentWidget) {
                 removeWidget(currentWidget.name);
             } else {
-                addWidget(componentEntry, defaultPosition);
+                addWidget(componentEntry, { x, y, width, height });
             }
         }
         function addWidget(componentEntry, defaultPosition = { x: 100, y: 100, width: 300, height: 200 }) {
@@ -39,7 +43,6 @@ export const useWidgetStore = defineStore(
 
         function updateWidgetPosition(name, left, top) {
             const index = openWidgets.value.findIndex((w) => w.componentEntry.name === name);
-            console.log('👾 👾👾👾 ', index);
             if (index !== -1) {
                 openWidgets.value[index].x = left;
                 openWidgets.value[index].y = top;
@@ -54,6 +57,7 @@ export const useWidgetStore = defineStore(
 
         return {
             openWidgets,
+            getWidget,
             toggleWidget,
             bringToFront,
             addWidget,

@@ -48,22 +48,18 @@ const widgetStore = useWidgetStore();
 
 const toggleWindows = () => {
   console.log('toggleWindows');
-  widgetStore.toggleWidget({ name: 'GetProjectsComponnent', component: GetProjectsComponnent });
+  widgetStore.toggleWidget({ name: 'GetProjectsComponnent', component: GetProjectsComponnent }, {width: 800, height: 600});
 };
 
 </script>
 
 <template>
   <NavbarComponnent />
+  {{ widgetStore.openWidgets }}
   <button @click="toggleWindows">Toggle Projects</button>
-  <div v-for="widget in widgetStore.openWidgets" :key="widget.name">
-    {{ widget.componentEntry }}
-    <hr>
-    x: {{widget.x}} | y:{{widget.y}}
-  </div>
   <div class="h-full w-full relative">
     <Window v-for="widget in widgetStore.openWidgets" :key="widget.componentEntry.name" :widgetName="widget.componentEntry.name" :x="widget.x" :y="widget.y" :zIndex="widget.zIndex" :title="widget.title">
-      <component :is="widget.componentEntry.component" />
+      <component v-if="widget.componentEntry" :is="widget.componentEntry.component" />
     </Window>
   </div>
 

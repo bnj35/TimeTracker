@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, defineProps, onMounted, onUnmounted } from 'vue';
 import {useWidgetStore} from "@/stores/widgetStore.js";
+import Button from 'primevue/button';
 
 const widgetStore = useWidgetStore();
 
@@ -17,23 +18,21 @@ const isResizing = ref(false);
 const dragOffset = ref({ x: 0, y: 0 });
 const resizeDirection = ref(null);
 
-const widgetData = computed(() => widgetStore.openWidgets.find(w => w.componentEntry.name === props.widgetName));
-
+//const widgetData = computed(() => widgetStore.openWidgets.find(w => w.componentEntry.name === props.widgetName));
+const widgetData = widgetStore.getWidget(props.widgetName);
 
 const startDrag = (event) => {
   isDragging.value = true;
   widgetStore.bringToFront(props.widgetName);
-  dragOffset.value = { x: event.clientX - widgetData.value.x, y: event.clientY - widgetData.value.y };
+  dragOffset.value = { x: event.clientX - widgetData.x, y: event.clientY - widgetData.y };
 };
 
 const onDrag = (event) => {
-  console.log('onDrag');
   if (isDragging.value) {
-    widgetStore.updateWidgetPosition(props.widgetName, {
-      x: event.clientX - dragOffset.value.x,
-      y: event.clientY - dragOffset.value.y,
-    });
-    console.log('✌️✌️✌️ x: ', event.clientX - dragOffset.value.x, ' y: ', event.clientY - dragOffset.value.y);
+    widgetStore.updateWidgetPosition(props.widgetName,
+        event.clientX - dragOffset.value.x,
+        event.clientY - dragOffset.value.y
+    );
   }
 };
 
@@ -51,7 +50,7 @@ const startResize = (event, direction) => {
 const onResize = (event) => {
   if (!isResizing.value) return;
 
-  let { x, y, width, height } = widgetData.value;
+  let { x, y, width, height } = widgetData;
 
   if (resizeDirection.value.includes("right")) {
     width = Math.max(200, event.clientX - x);
@@ -68,15 +67,16 @@ const onResize = (event) => {
     const delta = event.clientY - y;
     y += delta;
     height = Math.max(150, height - delta);
+    console.log('onResize height: ', height - delta);
   }
-
-  widgetStore.updateWidget(props.widgetName, { x, y, width, height });
+  widgetStore.updateWidget(props.widgetName, {x, y, width, height} );
 };
 
 const stopResize = () => (isResizing.value = false);
 
 
 onMounted(() => {
+  console.log('widgetData: ', widgetData);
   window.addEventListener("mousemove", onDrag);
   window.addEventListener("mouseup", stopDrag);
   window.addEventListener("mousemove", onResize);
@@ -93,15 +93,24 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div>
+  <div
+      v-if="widgetData"
+      class="absolute p-panel p-1 shadow-lg border border-gray-300 rounded-lg flex flex-col"
+      :style="{
+      top: widgetData.y + 'px',
+      left: widgetData.x + 'px',
+      width: widgetData.width + 'px',
+      height: widgetData.height + 'px',
+      zIndex: widgetData.zIndex,
+    }">
     <div
-        class="bg-gray-700 text-white p-2 cursor-move flex justify-between items-center rounded-t-lg"
+        class="text-white p-2 cursor-move flex justify-between items-center rounded-t-lg"
         @mousedown="startDrag"
     >
       <span>{{ title }}</span>
-      <button class="text-red-400 hover:text-red-600" @click="store.removeWindow(id)">✖</button>
+      <Button icon="pi pi-times" severity="danger" size="small" variant="text" rounded aria-label="Close" @click="closeWindow" />
     </div>
-    <div>
+    <div class="overflow-y-scroll">
       <slot></slot>
     </div>
 
@@ -117,12 +126,6 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-/* Style général */
-.absolute {
-  position: absolute;
-  min-width: 200px;
-  min-height: 150px;
-}
 
 /* Style des zones de redimensionnement */
 .resize-handle {
@@ -156,25 +159,21 @@ onUnmounted(() => {
 
 /* Côtés */
 .left {
-  top: 50%;
   left: -5px;
   height: 100%;
   cursor: ew-resize;
 }
 .right {
-  top: 50%;
   right: -5px;
   height: 100%;
   cursor: ew-resize;
 }
 .top {
-  left: 50%;
   top: -5px;
   width: 100%;
   cursor: ns-resize;
 }
 .bottom {
-  left: 50%;
   bottom: -5px;
   width: 100%;
   cursor: ns-resize;

@@ -95,7 +95,7 @@ onUnmounted(() => {
 <template>
   <div
       v-if="widgetData"
-      class="absolute p-panel p-1 shadow-lg border border-gray-300 rounded-lg flex flex-col"
+      class="absolute p-panel p-1 shadow-lg border border-gray-300 rounded-xl flex flex-col"
       :style="{
       top: widgetData.y + 'px',
       left: widgetData.x + 'px',
@@ -104,13 +104,24 @@ onUnmounted(() => {
       zIndex: widgetData.zIndex,
     }">
     <div
-        class="text-white p-2 cursor-move flex justify-between items-center rounded-t-lg"
+        class="text-white p-1 cursor-move flex justify-between items-center rounded-t-lg"
         @mousedown="startDrag"
     >
       <span>{{ title }}</span>
-      <Button icon="pi pi-times" severity="danger" size="small" variant="text" rounded aria-label="Close" @click="closeWindow" />
+      <span @click="closeWindow" class="hover:bg-red-500 transition-all aspect-square h-6 w-6 flex items-center justify-center rounded-full cursor-pointer">
+        <i class="pi pi-times !text-xs"></i>
+      </span>
+<!--      <Button icon="pi pi-times"-->
+<!--              severity="danger"-->
+<!--              size="small"-->
+<!--              variant="text"-->
+<!--              rounded-->
+<!--              aria-label="Close"-->
+<!--              @click="closeWindow"-->
+<!--              class="!p-0 !h-6 !w-6"/>-->
+
     </div>
-    <div class="overflow-y-scroll">
+    <div class="overflow-y-scroll h-full">
       <slot></slot>
     </div>
 
@@ -160,22 +171,22 @@ onUnmounted(() => {
 /* Côtés */
 .left {
   left: -5px;
-  height: 100%;
+  height: calc(100% - 10px);
   cursor: ew-resize;
 }
 .right {
   right: -5px;
-  height: 100%;
+  height: calc(100% - 10px);
   cursor: ew-resize;
 }
 .top {
   top: -5px;
-  width: 100%;
+  width: calc(100% - 10px);
   cursor: ns-resize;
 }
 .bottom {
   bottom: -5px;
-  width: 100%;
+  width: calc(100% - 10px);
   cursor: ns-resize;
 }
 </style>

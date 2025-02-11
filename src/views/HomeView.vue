@@ -1,5 +1,4 @@
 <script setup>
-import { ref, onMounted } from 'vue';
 // import NewActiviteComponnent from '@/components/NewActiviteComponnent.vue';
 // import GetActiviteComponnent from '@/components/GetActiviteComponnent.vue';
 // import GetProjectsComponnent from '@/components/GetProjectsComponnent.vue';
@@ -39,24 +38,27 @@ import { ref, onMounted } from 'vue';
 //   if (getProjectsRef.value) setRandomPosition(getProjectsRef.value, 'getProjects');
 //   if (newProjectsRef.value) setRandomPosition(newProjectsRef.value, 'newProjects');
 // });
+
+import { ref, onMounted, resolveComponent} from 'vue';
 import NavbarComponnent from '@/components/NavbarComponnent.vue';
 import Window from "@/components/Window.vue";
 import GetProjectsComponnent from "@/components/GetProjectsComponnent.vue";
 import { useWidgetStore } from '@/stores/widgetStore.js';
+import Button from 'primevue/button';
 
 const widgetStore = useWidgetStore();
 
 const toggleWindows = () => {
   console.log('toggleWindows');
-  widgetStore.toggleWidget({ name: 'GetProjectsComponnent', component: GetProjectsComponnent }, {width: 800, height: 600});
+  widgetStore.toggleWidget({ name: 'GetProjectsComponnent', component: "GetProjectsComponnent" }, {width: 800, height: 600});
 };
 
 </script>
 
 <template>
   <NavbarComponnent />
-  {{ widgetStore.openWidgets }}
-  <button @click="toggleWindows">Toggle Projects</button>
+<!--  <button @click="toggleWindows">Toggle Projects</button>-->
+  <Button label="Toggle Projects" @click="toggleWindows" />
   <div class="h-full w-full relative">
     <Window v-for="widget in widgetStore.openWidgets" :key="widget.componentEntry.name" :widgetName="widget.componentEntry.name" :x="widget.x" :y="widget.y" :zIndex="widget.zIndex" :title="widget.title">
       <component v-if="widget.componentEntry" :is="widget.componentEntry.component" />

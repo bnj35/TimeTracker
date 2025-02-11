@@ -15,9 +15,9 @@ export const useWidgetStore = defineStore(
         }
 
         function toggleWidget(componentEntry,  { x= 100, y= 100, width= 300, height= 200 }) {
-            const currentWidget = openWidgets.value.find(w => w.name === componentEntry.name);
+            const currentWidget = openWidgets.value.find(w => w.componentEntry.name === componentEntry.name);
             if (currentWidget) {
-                removeWidget(currentWidget.name);
+                removeWidget(currentWidget.componentEntry.name);
             } else {
                 addWidget(componentEntry, { x, y, width, height });
             }

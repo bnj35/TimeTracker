@@ -24,7 +24,6 @@ const GetProjects = async () => {
         if (response.error) {
             toast.add({ severity: 'error', summary: 'Error', detail: response.error.message, life: 3000 });
         } else {
-            toast.add({ severity: 'success', summary: 'Success', detail: 'Projects fetched', life: 3000 });
             projects.value = response.data;
         }
     } catch (e) {
@@ -40,7 +39,7 @@ const closeProjects = async (id) => {
             toast.add({ severity: 'error', summary: 'Error', detail: response.error.message, life: 3000 });
         } else {
             toast.add({ severity: 'success', summary: 'Success', detail: 'Projects closed', life: 3000 });
-            GetProjects();
+            await GetProjects();
         }
     } catch (e) {
         toast.add({ severity: 'error', summary: 'Error', detail: 'Error during form submission', life: 3000 });
@@ -71,7 +70,7 @@ const modifyProjects = async () => {
         } else {
             toast.add({ severity: 'success', summary: 'Success', detail: 'Projects modified', life: 3000 });
             visibleModifyDialog.value = false;
-            GetProjects();
+            await GetProjects();
         }
     } catch (e) {
         toast.add({ severity: 'error', summary: 'Error', detail: 'Error during form submission', life: 3000 });

@@ -44,6 +44,7 @@ const closeWindow = () => {
 
 const startResize = (event, direction) => {
   isResizing.value = true;
+  document.body.classList.add('select-none');
   resizeDirection.value = direction;
 };
 
@@ -61,22 +62,23 @@ const onResize = (event) => {
     width = Math.max(200, width - delta);
   }
   if (resizeDirection.value.includes("bottom")) {
+    console.log('bottom: ', event.clientY, y);
     height = Math.max(150, event.clientY - y);
   }
   if (resizeDirection.value.includes("top")) {
     const delta = event.clientY - y;
-    y += delta;
-    height = Math.max(150, height - delta);
-    console.log('onResize height: ', height - delta);
+      y += delta;
+      height = Math.max(150, height - delta);
   }
   widgetStore.updateWidget(props.widgetName, {x, y, width, height} );
 };
 
-const stopResize = () => (isResizing.value = false);
-
+const stopResize = () => {
+  isResizing.value = false;
+  document.body.classList.remove('select-none');
+};
 
 onMounted(() => {
-  console.log('widgetData: ', widgetData);
   window.addEventListener("mousemove", onDrag);
   window.addEventListener("mouseup", stopDrag);
   window.addEventListener("mousemove", onResize);

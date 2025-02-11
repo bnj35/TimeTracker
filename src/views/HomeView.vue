@@ -49,8 +49,7 @@ import Button from 'primevue/button';
 const widgetStore = useWidgetStore();
 
 const toggleWindows = () => {
-  console.log('toggleWindows');
-  widgetStore.toggleWidget({ name: 'GetProjectsComponnent', component: "GetProjectsComponnent" }, {width: 800, height: 600});
+  widgetStore.toggleWidget({ name: 'GetProjectsComponnent', component: "GetProjectsComponnent" }, {width: 800, height: 500});
 };
 
 </script>

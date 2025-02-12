@@ -7,6 +7,7 @@ import Tooltip from 'primevue/tooltip';
 import Aura from '@primevue/themes/aura';
 import './assets/main.css'
 import ToastService from 'primevue/toastservice';
+import GetProjectsComponnent from "@/components/GetProjectsComponnent.vue";
 
 
 import App from './App.vue'
@@ -28,6 +29,11 @@ app.use(PrimeVue, {
         }
     }
 })
+
+//need to register all component here in order to use them in the widget store
+//otherwise they trigger warnings
+app.component('GetProjectsComponnent', GetProjectsComponnent);
+
 app.use(ToastService);
 app.directive('tooltip', Tooltip);
 

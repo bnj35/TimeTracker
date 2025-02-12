@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, defineProps, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import {useWidgetStore} from "@/stores/widgetStore.js";
 import Button from 'primevue/button';
 

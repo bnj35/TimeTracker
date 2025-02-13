@@ -6,8 +6,11 @@ import 'primeicons/primeicons.css'
 import { RouterLink } from 'vue-router';
 import { Dialog } from 'primevue';
 import { Tree } from 'primevue';
+import {useToast} from "primevue/usetoast";
+import {useWidgetStore} from "@/stores/widgetStore.js";
 
-
+const toast = useToast()
+const widgetStore = useWidgetStore()
 
 
 const displayFinder = ref(false);
@@ -21,19 +24,26 @@ const items = ref([
         }
     },
     {
-        label: 'App Store',
-        icon: 'https://primefaces.org/cdn/primevue/images/dock/appstore.svg'
+      label: 'App Store',
+      icon: 'https://primefaces.org/cdn/primevue/images/dock/appstore.svg'
     },
     {
-        label: 'Photos',
-        icon: 'https://primefaces.org/cdn/primevue/images/dock/photos.svg'
+      label: 'Photos',
+      icon: 'https://primefaces.org/cdn/primevue/images/dock/photos.svg'
     },
     {
-        label: 'Trash',
-        icon: "https://primefaces.org/cdn/primevue//images/dock/trash.png",
-        command: () => {
-            toast.add({ severity: 'info', summary: 'Empty Trash', life: 3000 });
-        }
+      label: 'Trash',
+      icon: "https://primefaces.org/cdn/primevue//images/dock/trash.png",
+      command: () => {
+          toast.add({ severity: 'info', summary: 'Empty Trash', life: 3000 });
+      }
+    },
+    {
+      label: 'Suivi de l\'activité',
+      icon: "https://help.apple.com/assets/65D68AF113D1B1E17703918B/65D68AF23650BFC92E07378A/fr_FR/381483cc8993a6ee5a017db0d5036117.png",
+      command: () => {
+          widgetStore.toggleWidget({ name: 'TimeEntries', component: "TimeEntries" }, {width: 800, height: 500});
+      }
     }
 ]);
 

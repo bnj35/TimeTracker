@@ -1,6 +1,7 @@
 <script setup>
 import Panel from "primevue/panel";
 import NewTimeEntrie from "@/components/TimeEntries/NewTimeEntrie.vue";
+import TimeViewer from "@/components/TimeEntries/TimeViewer.vue";
 
 </script>
 
@@ -8,6 +9,7 @@ import NewTimeEntrie from "@/components/TimeEntries/NewTimeEntrie.vue";
   <Panel>
     <div>
       <NewTimeEntrie />
+      <TimeViewer />
     </div>
 
     <div>

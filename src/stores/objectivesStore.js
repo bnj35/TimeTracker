@@ -33,7 +33,7 @@ export const useObjectiveStore = defineStore('objectives', () => {
             const response = await api.post('/api/daily-objectives', {
                 name: objective.name,
                 content: objective.content,
-            })
+            })@
             objectives.value.push(response.data)
             return  response
         }catch (error){

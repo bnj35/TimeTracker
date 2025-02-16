@@ -179,7 +179,6 @@ onMounted(() => {
                 </Dialog>
 
                 <Dialog v-model:visible="displayFinder" header="Finder" :breakpoints="{ '960px': '50vw' }" :style="{ width: '40vw' }" :maximizable="true">
-                    <Tree :value="nodes" />
                 </Dialog>
 
                 <Menubar :model="menubarItems">

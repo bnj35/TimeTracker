@@ -19,9 +19,9 @@ const toggleActivities = ()=>{
 
 <template>
   <NavbarComponnent />
-<!--  <button @click="toggleWindows">Toggle Projects</button>-->
+ <!-- <button @click="toggleWindows">Toggle Projects</button>
   <Button label="Toggle Projects" @click="toggleProjects" />
-  <Button label="Toggle Activities" @click="toggleActivities" />
+  <Button label="Toggle Activities" @click="toggleActivities" /> -->
   <div class="h-full w-full relative">
     <Window v-for="widget in widgetStore.openWidgets" :key="widget.componentEntry.name" :widgetName="widget.componentEntry.name" :x="widget.x" :y="widget.y" :zIndex="widget.zIndex" :title="widget.title">
       <component v-if="widget.componentEntry" :is="widget.componentEntry.component" />

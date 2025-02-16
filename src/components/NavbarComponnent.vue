@@ -61,6 +61,13 @@ const items = ref([
 ]);
 
 const menubarItems = ref([
+{
+        label:'Profil',
+        icon: 'pi pi-fw pi-user',
+        command: () => {
+            widgetStore.toggleWidget({ name: 'profile', component: "profileComponnent" }, {width: 800, height: 500});
+        }
+    },
     {
         label: 'Projets',
         class: 'menubar-root',
@@ -69,7 +76,7 @@ const menubarItems = ref([
                 label: 'Nouveau',
                 icon: 'pi pi-fw pi-plus',
                 command: () => {
-                    widgetStore.toggleWidget({ name: 'newProject', component: "newProjectComponents" }, {width: 800, height: 500});
+                    widgetStore.toggleWidget({ name: 'newProjects', component: "newProjectsComponnet" }, {width: 800, height: 500});
                 }
             },
         ]

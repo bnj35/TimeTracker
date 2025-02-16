@@ -8,12 +8,40 @@ import { Dialog } from 'primevue';
 import { Tree } from 'primevue';
 import {useToast} from "primevue/usetoast";
 import {useWidgetStore} from "@/stores/widgetStore.js";
+import TerminalService from 'primevue/terminalservice';
+import  Terminal  from 'primevue/terminal';
 
 const toast = useToast()
 const widgetStore = useWidgetStore()
 
 
 const displayFinder = ref(false);
+const displayTerminal = ref(false);
+
+const commandHandler = (text) => {
+    let response;
+    let argsIndex = text.indexOf(' ');
+    let command = argsIndex !== -1 ? text.substring(0, argsIndex) : text;
+
+    switch(command) {
+        case "date":
+            response = 'Today is ' + new Date().toDateString();
+            break;
+
+        case "greet":
+            response = 'Hola ' + text.substring(argsIndex + 1);
+            break;
+
+        case "random":
+            response = Math.floor(Math.random() * 100);
+            break;
+
+        default:
+            response = "Unknown command: " + command;
+    }
+
+    TerminalService.emit('response', response);
+};
 
 const items = ref([
     {
@@ -21,6 +49,13 @@ const items = ref([
         icon: "https://primefaces.org/cdn/primevue//images/dock/finder.svg",
         command: () => {
             displayFinder.value = true;
+        }
+    },
+    {
+        label: 'terminal',
+        icon: "https://primefaces.org/cdn/primevue//images/dock/terminal.svg",
+        command: () => {
+            displayTerminal.value = true;
         }
     },
     {
@@ -118,6 +153,14 @@ const onDockItemClick = (event, item) => {
     event.preventDefault();
 };
 
+onBeforeUnmount(() => {
+    TerminalService.off('command', commandHandler);
+})
+
+onMounted(() => {
+    TerminalService.on('command', commandHandler);
+})
+
 </script>
 
 <template>
@@ -130,6 +173,10 @@ const onDockItemClick = (event, item) => {
                         </a>
                     </template>
                 </Dock>
+
+                <Dialog v-model:visible="displayTerminal" header="Terminal" :breakpoints="{ '960px': '50vw' }" :style="{ width: '40vw' }" :maximizable="true">
+                    <Terminal welcomeMessage="Welcome to PrimeVue(cmd: 'date', 'greet {0}' and 'random')" prompt="primevue $" />
+                </Dialog>
 
                 <Dialog v-model:visible="displayFinder" header="Finder" :breakpoints="{ '960px': '50vw' }" :style="{ width: '40vw' }" :maximizable="true">
                     <Tree :value="nodes" />

@@ -3,7 +3,6 @@ import { ref } from 'vue';
 import Panel from 'primevue/panel';
 import { Form } from '@primevue/forms';
 import InputText from 'primevue/inputtext';
-import ColorPicker from 'primevue/colorpicker';
 import Button from 'primevue/button';
 import { useProjectsStore } from '@/stores/projectsStore';
 import { useToast } from 'primevue/usetoast';

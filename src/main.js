@@ -14,6 +14,8 @@ import GetActiviteComponnent from "@/components/GetActiviteComponnent.vue";
 import TimeEntries from "@/components/TimeEntries/TimeEntries.vue";
 import NewActiviteComponnent from "./components/NewActiviteComponnent.vue";
 import NewProjectsComponent from "./components/NewProjectsComponent.vue";
+import LoginComponent from "./components/Profil/LoginComponent.vue";
+import RegisterComponent from "./components/Profil/RegisterComponent.vue";
 
 
 const app = createApp(App);
@@ -39,6 +41,8 @@ app.component("GetProjectsComponnent", GetProjectsComponnent);
 app.component("GetActiviteComponnent", GetActiviteComponnent);
 app.component("newActiviteComponnent", NewActiviteComponnent);
 app.component("newProjectsComponnet", NewProjectsComponent);
+app.component("LoginComponent", LoginComponent);
+app.component("RegisterComponent", RegisterComponent);  
 app.component("TimeEntries", TimeEntries);
 
 //--------------------

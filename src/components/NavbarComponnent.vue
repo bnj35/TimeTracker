@@ -10,6 +10,7 @@ import {useToast} from "primevue/usetoast";
 import {useWidgetStore} from "@/stores/widgetStore.js";
 import TerminalService from 'primevue/terminalservice';
 import  Terminal  from 'primevue/terminal';
+import { useUserStore } from '@/stores/userStore';
 
 const toast = useToast()
 const widgetStore = useWidgetStore()
@@ -99,9 +100,39 @@ const menubarItems = ref([
 {
         label:'Profil',
         icon: 'pi pi-fw pi-user',
-        command: () => {
-            widgetStore.toggleWidget({ name: 'profile', component: "profileComponnent" }, {width: '100%', height: '100%'});
-        }
+        // command: () => {
+        //     widgetStore.toggleWidget({ name: 'profile', component: "profileComponnent" }, {width: '100%', height: '100%'});
+        // }
+        items: [
+            {
+                label: 'Connexion',
+                icon: 'pi pi-fw pi-sign-in',
+                command: () => {
+                    widgetStore.toggleWidget({ name: 'Login', component: "LoginComponent" }, {width: '100%', height: '100%'});
+                }
+            },
+            {
+                label: 'Inscription',
+                icon: 'pi pi-fw pi-user-plus',
+                command: () => {
+                    widgetStore.toggleWidget({ name: 'Register', component: "RegisterComponent" }, {width: '100%', height: '100%'});
+                }
+            },
+            {
+                label: 'Profil',
+                icon: 'pi pi-fw pi-user',
+                command: () => {
+                    widgetStore.toggleWidget({ name: 'profile', component: "profileComponnent" }, {width: '100%', height: '100%'});
+                }
+            },
+            {
+                label: 'Déconnexion',
+                icon: 'pi pi-fw pi-power-off',
+                command: () => {
+                    useUserStore().logout();
+                }
+            },
+        ]
     },
     {
         label: 'Projets',

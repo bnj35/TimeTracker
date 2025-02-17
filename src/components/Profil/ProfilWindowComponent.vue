@@ -1,13 +1,15 @@
 <script setup>
 import ProfilComponnent from './ProfilComponnent.vue';
 import StatsComponnent from './StatsComponnent.vue';
+import Panel from 'primevue/panel';
 
 </script>
 
 <template>
-    <div class="flex flex-col gap-4">
+    <Panel class="flex flex-col gap-4  w-full h-full">
+
         <ProfilComponnent />
         <StatsComponnent />
-    </div>
+    </Panel>
 
 </template>

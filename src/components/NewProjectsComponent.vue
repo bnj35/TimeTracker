@@ -50,7 +50,7 @@ const createProjects = async () => {
 
 
 <template>
-    <Panel header="Nouveaux Projets" >
+    <Panel header="Nouveaux Projets" class=" w-full h-full">
         <Form @submit="createProjects" :resolver="resolver" :initialValues="values">
             <div class="p-fluid space-y-4">
                 <div class="p-field">

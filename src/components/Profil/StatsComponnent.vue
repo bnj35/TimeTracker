@@ -58,7 +58,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
+  <div class="w-full h-full">
     <h2>Statistics</h2>
     <div class="filters">
       <Calendar v-model="startDate" placeholder="Start Date" />

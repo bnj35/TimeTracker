@@ -51,7 +51,7 @@ const createActivity = async () => {
 
 
 <template>
-    <Panel header="Nouvelle Activité"  >
+    <Panel header="Nouvelle Activité" class=" w-full h-full" >
         <Form @submit="createActivity" :resolver="resolver" :initialValues="values" >
             <div class="p-fluid space-y-4">
                 <div class="p-field">

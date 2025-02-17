@@ -46,7 +46,7 @@ const commandHandler = (text) => {
 
 const items = ref([
     {
-        label: 'Finder',
+        label: 'Participants',
         icon: "https://primefaces.org/cdn/primevue//images/dock/finder.svg",
         command: () => {
             displayFinder.value = true;
@@ -98,11 +98,7 @@ const items = ref([
 
 const menubarItems = ref([
 {
-        label:'Profil',
         icon: 'pi pi-fw pi-user',
-        // command: () => {
-        //     widgetStore.toggleWidget({ name: 'profile', component: "profileComponnent" }, {width: '100%', height: '100%'});
-        // }
         items: [
             {
                 label: 'Connexion',
@@ -209,7 +205,10 @@ onMounted(() => {
                     <Terminal welcomeMessage="Welcome to PrimeVue(cmd: 'date', 'greet {0}' and 'random')" prompt="primevue $" />
                 </Dialog>
 
-                <Dialog v-model:visible="displayFinder" header="Finder" :breakpoints="{ '960px': '50vw' }" :style="{ width: '40vw' }" :maximizable="true">
+                <Dialog v-model:visible="displayFinder" header="Participants" :breakpoints="{ '960px': '50vw' }" :style="{ width: '40vw' }" :maximizable="true">
+                    <p>Antoine RUBEO-LISA</p>
+                    <p>Benjamin AUGER</p>
+                    <p>Vadim KHENFER</p>
                 </Dialog>
 
                 <Menubar :model="menubarItems">

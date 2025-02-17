@@ -41,7 +41,7 @@ const onFormSubmit = async () => {
 </script>
 
 <template>
-  <Panel class="w-sm flex items-center flex-col" header="Register">
+  <Panel class="w-full h-full flex items-center flex-col" header="Register">
     <Fluid>
       <Form v-slot="$form" :resolver="resolver" :initialValues @submit="onFormSubmit" class="flex flex-col gap-4 w-full sm:w-56">
           <div class="flex flex-col gap-1">

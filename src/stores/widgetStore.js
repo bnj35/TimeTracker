@@ -67,8 +67,9 @@ export const useWidgetStore = defineStore(
             }else{
                 widget.x = window.innerWidth/5;
                 widget.y = window.innerHeight/5;
-                widget.width = 800;
-                widget.height = 500;
+                widget.width = 500;
+                widget.height = 300;
+
                 widget.fullscreen = false;
             }
         }

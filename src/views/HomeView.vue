@@ -8,11 +8,11 @@ import Button from 'primevue/button';
 const widgetStore = useWidgetStore();
 
 const toggleProjects = () => {
-  widgetStore.toggleWidget({ name: 'GetProjectsComponnent', component: "GetProjectsComponnent" }, {width: 800, height: 500});
+  widgetStore.toggleWidget({ name: 'GetProjectsComponnent', component: "GetProjectsComponnent" }, {width: '100%', height: '100%'});
 };
 
 const toggleActivities = ()=>{
-  widgetStore.toggleWidget({ name: 'GetActiviteComponnent', component: "GetActiviteComponnent" }, {width: 800, height: 500});
+  widgetStore.toggleWidget({ name: 'GetActiviteComponnent', component: "GetActiviteComponnent" }, {width: '100%', height: '100%'});
 }
 
 </script>

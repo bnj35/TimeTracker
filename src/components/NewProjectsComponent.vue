@@ -52,7 +52,7 @@ const createProjects = async () => {
 <template>
     <Panel header="Nouveaux Projets" >
         <Form @submit="createProjects" :resolver="resolver" :initialValues="values">
-            <div class="p-fluid">
+            <div class="p-fluid space-y-4">
                 <div class="p-field">
                     <InputText id="nom" type="text" v-model="values.name" placeholder="Nom" required="" />
                 </div>

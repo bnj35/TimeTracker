@@ -51,13 +51,13 @@ const createActivity = async () => {
 
 
 <template>
-    <Panel header="Nouvelle Activité" >
-        <Form @submit="createActivity" :resolver="resolver" :initialValues="values">
-            <div class="p-fluid">
+    <Panel header="Nouvelle Activité"  >
+        <Form @submit="createActivity" :resolver="resolver" :initialValues="values" >
+            <div class="p-fluid space-y-4">
                 <div class="p-field">
                     <InputText id="nom" type="text" v-model="values.name" placeholder="Nom" required="" />
                 </div>
-                <div class="p-field">
+                <div class="p-field space-x-3">
                     <label for="Color">Color Picker</label>
                     <ColorPicker id="Color" v-model="values.color" />
                 </div>

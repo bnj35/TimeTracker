@@ -109,13 +109,13 @@ onUnmounted(() => {
     <div class="text-white p-1 cursor-move flex justify-between items-center rounded-t-lg" @mousedown="startDrag">
       <span>{{ title }}</span>
       <div class="flex space-x-1">
-      <span @click="closeWindow"
-        class="text-black hover:bg-red-500 transition-all aspect-square h-6 w-6 flex items-center justify-center rounded-full cursor-pointer">
-        <i class="pi pi-times !text-xs"></i>
-      </span>
-      <span @click="maxWindow"
-        class="text-black hover:bg-red-500 transition-all aspect-square h-6 w-6 flex items-center justify-center rounded-full cursor-pointer">
+        <span @click="maxWindow"
+        class="text-primary-950 hover:bg-red-500 hover:text-primary-50 transition-all aspect-square h-6 w-6 flex items-center justify-center rounded-full cursor-pointer">
         <i class="pi pi-window-maximize !text-xs"></i>
+      </span>
+      <span @click="closeWindow"
+        class="text-primary-950 hover:bg-red-500 hover:text-primary-50 transition-all aspect-square h-6 w-6 flex items-center justify-center rounded-full cursor-pointer">
+        <i class="pi pi-times !text-xs"></i>
       </span>
     </div>
 

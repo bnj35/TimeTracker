@@ -214,7 +214,7 @@ onMounted(() => {
 
                 <Menubar :model="menubarItems">
                 <template #start class="menubar-start">
-                    <RouterLink :to="{ name: 'home' }"><i class="pi pi-apple px-2"></i></RouterLink> 
+                    <RouterLink :to="{ name: 'home' }"><i class="pi pi-apple px-2 text-primary"></i></RouterLink> 
                 </template>
                 <template #end class="menubar-end">
                     <i class="pi pi-video px-2"/>

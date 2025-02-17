@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
-import {useWidgetStore} from "@/stores/widgetStore.js";
+import { useWidgetStore } from "@/stores/widgetStore.js";
 import Button from 'primevue/button';
 
 const widgetStore = useWidgetStore();
@@ -30,8 +30,8 @@ const startDrag = (event) => {
 const onDrag = (event) => {
   if (isDragging.value) {
     widgetStore.updateWidgetPosition(props.widgetName,
-        event.clientX - dragOffset.value.x,
-        event.clientY - dragOffset.value.y
+      event.clientX - dragOffset.value.x,
+      event.clientY - dragOffset.value.y
     );
   }
 };
@@ -40,6 +40,10 @@ const stopDrag = () => (isDragging.value = false);
 
 const closeWindow = () => {
   widgetStore.removeWidget(props.widgetName);
+};
+
+const maxWindow = () => {
+  widgetStore.maximizeWidget(props.widgetName);
 };
 
 const startResize = (event, direction) => {
@@ -67,10 +71,10 @@ const onResize = (event) => {
   }
   if (resizeDirection.value.includes("top")) {
     const delta = event.clientY - y;
-      y += delta;
-      height = Math.max(150, height - delta);
+    y += delta;
+    height = Math.max(150, height - delta);
   }
-  widgetStore.updateWidget(props.widgetName, {x, y, width, height} );
+  widgetStore.updateWidget(props.widgetName, { x, y, width, height });
 };
 
 const stopResize = () => {
@@ -95,32 +99,34 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div
-      v-if="widgetData"
-      class="absolute p-panel p-1 shadow-lg border border-gray-300 rounded-xl flex flex-col"
-      :style="{
-      top: widgetData.y + 'px',
-      left: widgetData.x + 'px',
-      width: widgetData.width + 'px',
-      height: widgetData.height + 'px',
-      zIndex: widgetData.zIndex,
-    }">
-    <div
-        class="text-white p-1 cursor-move flex justify-between items-center rounded-t-lg"
-        @mousedown="startDrag"
-    >
+  <div v-if="widgetData" class="absolute p-panel p-1 shadow-lg border border-gray-300 rounded-xl flex flex-col" :style="{
+    top: widgetData.y + 'px',
+    left: widgetData.x + 'px',
+    width: widgetData.width + 'px',
+    height: widgetData.height + 'px',
+    zIndex: widgetData.zIndex,
+  }">
+    <div class="text-white p-1 cursor-move flex justify-between items-center rounded-t-lg" @mousedown="startDrag">
       <span>{{ title }}</span>
-      <span @click="closeWindow" class="hover:bg-red-500 transition-all aspect-square h-6 w-6 flex items-center justify-center rounded-full cursor-pointer">
+      <div class="flex space-x-1">
+      <span @click="closeWindow"
+        class="text-black hover:bg-red-500 transition-all aspect-square h-6 w-6 flex items-center justify-center rounded-full cursor-pointer">
         <i class="pi pi-times !text-xs"></i>
       </span>
-<!--      <Button icon="pi pi-times"-->
-<!--              severity="danger"-->
-<!--              size="small"-->
-<!--              variant="text"-->
-<!--              rounded-->
-<!--              aria-label="Close"-->
-<!--              @click="closeWindow"-->
-<!--              class="!p-0 !h-6 !w-6"/>-->
+      <span @click="maxWindow"
+        class="text-black hover:bg-red-500 transition-all aspect-square h-6 w-6 flex items-center justify-center rounded-full cursor-pointer">
+        <i class="pi pi-window-maximize !text-xs"></i>
+      </span>
+    </div>
+
+      <!--      <Button icon="pi pi-times"-->
+      <!--              severity="danger"-->
+      <!--              size="small"-->
+      <!--              variant="text"-->
+      <!--              rounded-->
+      <!--              aria-label="Close"-->
+      <!--              @click="closeWindow"-->
+      <!--              class="!p-0 !h-6 !w-6"/>-->
 
     </div>
     <div class="overflow-y-scroll h-full">
@@ -139,7 +145,6 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-
 /* Style des zones de redimensionnement */
 .resize-handle {
   position: absolute;
@@ -154,16 +159,19 @@ onUnmounted(() => {
   left: -5px;
   cursor: nwse-resize;
 }
+
 .top-right {
   top: -5px;
   right: -5px;
   cursor: nesw-resize;
 }
+
 .bottom-left {
   bottom: -5px;
   left: -5px;
   cursor: nesw-resize;
 }
+
 .bottom-right {
   bottom: -5px;
   right: -5px;
@@ -176,16 +184,19 @@ onUnmounted(() => {
   height: calc(100% - 10px);
   cursor: ew-resize;
 }
+
 .right {
   right: -5px;
   height: calc(100% - 10px);
   cursor: ew-resize;
 }
+
 .top {
   top: -5px;
   width: calc(100% - 10px);
   cursor: ns-resize;
 }
+
 .bottom {
   bottom: -5px;
   width: calc(100% - 10px);

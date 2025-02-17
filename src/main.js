@@ -16,6 +16,7 @@ import NewActiviteComponnent from "./components/NewActiviteComponnent.vue";
 import NewProjectsComponent from "./components/NewProjectsComponent.vue";
 import LoginComponent from "./components/Profil/LoginComponent.vue";
 import RegisterComponent from "./components/Profil/RegisterComponent.vue";
+import ProfilWindowComponent from "./components/Profil/ProfilWindowComponent.vue";
 
 
 const app = createApp(App);
@@ -63,6 +64,7 @@ app.component("newProjectsComponnet", NewProjectsComponent);
 app.component("LoginComponent", LoginComponent);
 app.component("RegisterComponent", RegisterComponent);  
 app.component("TimeEntries", TimeEntries);
+app.component("ProfilWindowComponent", ProfilWindowComponent);
 
 //--------------------
 app.use(ToastService);

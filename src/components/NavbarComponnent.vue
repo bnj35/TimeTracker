@@ -122,7 +122,7 @@ const menubarItems = ref([
                 label: 'Profil',
                 icon: 'pi pi-fw pi-user',
                 command: () => {
-                    widgetStore.toggleWidget({ name: 'profile', component: "profileComponnent" }, {width: '100%', height: '100%'});
+                    widgetStore.toggleWidget({ name: 'Profile', component: "ProfilWindowComponent" }, {width: '100%', height: '100%'});
                 }
             },
             {
@@ -214,7 +214,7 @@ onMounted(() => {
 
                 <Menubar :model="menubarItems">
                 <template #start class="menubar-start">
-                    <RouterLink :to="{ name: 'home' }"><i class="pi pi-apple px-2 text-primary"></i></RouterLink> 
+                    <RouterLink :to="{ name: 'home' }"><i class="pi pi-apple px-2 text-primary-950"></i></RouterLink> 
                 </template>
                 <template #end class="menubar-end">
                     <i class="pi pi-video px-2"/>

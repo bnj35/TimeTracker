@@ -1,10 +1,10 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useToast } from 'vue-toastification';
-import { Chart } from 'chart.js';
+// import { Chart } from 'chart.js';
 import PrimeVue from 'primevue/config';
 import Calendar from 'primevue/calendar';
 import Button from 'primevue/button';
+import { useToast } from 'primevue';
 import { useAPI } from '@/composables/useAPI';
 
 
@@ -22,12 +22,12 @@ const timeEntries = ref([]);
 
 const fetchData = async () => {
 try {
-    const response = await api.get('/stats', {
-        params: {
-            startDate: startDate.value.toISOString(),
-            endDate: endDate.value.toISOString(),
-        },
-    });
+    // const response = await api.get('/stats', {
+    //     params: {
+    //         startDate: startDate.value.toISOString(),
+    //         endDate: endDate.value.toISOString(),
+    //     },
+    // });
 
     totalTimeWorked.value = response.data.totalTimeWorked;
     projectDistribution.value = response.data.projectDistribution;
@@ -48,7 +48,7 @@ try {
         data: activityDistribution.value,
     });
   } catch (error) {
-    toast.error('An error occurred while fetching data');
+    toast.add({ severity: 'error', summary: 'Error', detail: 'Error during fetch data', life: 3000 });
   }
 };
 

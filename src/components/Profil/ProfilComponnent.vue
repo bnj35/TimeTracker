@@ -16,8 +16,7 @@ function updateUser() {
 </script>
 
 <template>
-    <div class="p-grid p-fluid w-full h-full">
-        <div class="p-col-12">
+    <div class="p-fluid w-full h-full">
             <div class="p-grid p-fluid flex flex-col space-y-3">
                 <h1 class="text-primary-950 text-4xl">Bonjour {{ user.name }}</h1>
                 <p class="text-primary-800 ">Vous pouvez modifier vos informations personnelles ici.</p>
@@ -30,6 +29,5 @@ function updateUser() {
                     <Button type="submit" severity="primary" label="Modifier" class="w-fit-content"/>
                 </Form>
             </div>
-        </div>
     </div>
 </template>

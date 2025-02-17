@@ -79,16 +79,3 @@ onMounted(() => {
     </div>
   </div>
 </template>
-
-<style scoped>
-.filters {
-  display: flex;
-  gap: 1rem;
-}
-.statistics {
-  margin-top: 2rem;
-}
-.time-entries {
-  margin-top: 2rem;
-}
-</style> 

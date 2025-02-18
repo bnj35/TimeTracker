@@ -46,8 +46,19 @@ export const useTimeEntriesStore = defineStore("timeEntries", () => {
     }
 
     async function deleteTimeEntries(id) {
-        const response = await api.delete("/api/time-entries/" + id);
-        return response;
+        try {
+            const response = await api.delete("/api/time-entries/" + id);
+            timeEntries.value = timeEntries.value.filter((timeEntry) => timeEntry.id !== id);
+            return response;
+        } catch (error) {
+            if (error.isAxiosError) {
+                console.error(`Failed to delete time entry: ${error.message}`);
+                throw new Error(`Failed to delete time entry: ${error.message}`);
+            } else {
+                console.error(error);
+                throw error;
+            }
+        }
     }
 
     return {

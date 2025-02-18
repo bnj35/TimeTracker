@@ -33,10 +33,11 @@ onUnmounted(() => {
   clearInterval(interval); // Nettoyage pour éviter les fuites de mémoire
 });
 
-const handleCloseTimeEntries = () => {
-  timeEntriesStore.closeTimeEntries("9dd89c03-dee1-4cb9-b13f-ea9f7eae5c11")
+const handleCloseTimeEntries = async () => {
+  timeEntriesStore.closeTimeEntries(timeEntriesStore.currentTimeEntries.id)
     .then(() => {
       toast.add({severity: 'success', summary: 'Success', detail: 'Time entries closed', life: 3000});
+      timeEntriesStore.fetchTimeEntries();
     })
     .catch((e) => {
       toast.add({severity: 'error', summary: 'Error', detail: 'Error during closing time entries', life: 3000});

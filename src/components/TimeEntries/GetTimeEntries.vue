@@ -4,13 +4,15 @@ import Column from "primevue/column";
 import DataTable from "primevue/datatable";
 import Button from "primevue/button";
 import DatePicker from 'primevue/datepicker';
-import Fluid from "primevue/fluid";
 import {useTimeEntriesStore} from "@/stores/timeEntriesStore.js";
 import {useProjectsStore} from "@/stores/projectsStore.js";
 import {useActivityStore} from "@/stores/activityStore.js";
 import {onMounted} from "vue";
 import Dialog from "primevue/dialog";
 import Select from "primevue/select";
+import {useToast} from "primevue/usetoast";
+
+const toast = useToast();
 
 const timeEntriesStore = useTimeEntriesStore();
 const projectsStore = useProjectsStore();
@@ -53,6 +55,30 @@ watch(startDate, (newVal) => {
 watch(endDate, (newVal) => {
   selectedTimeEntrie.value.end = formatDate(newVal);
 });
+
+const handleUpdateTE = () => {
+  timeEntriesStore.updateTimeEntries(
+      {
+        id: selectedTimeEntrie.value.id,
+        project_id: modifiedProject.value.id,
+        activity_id: modifiedActivity.value.id,
+        start: selectedTimeEntrie.value.start,
+        end: selectedTimeEntrie.value.end
+      }
+  ) ;
+  visibleModifyDialog.value = false;
+}
+
+const handleDeleteTE = async () => {
+  try {
+    await timeEntriesStore.deleteTimeEntries(selectedTimeEntrie.value.id);
+    visibleModifyDialog.value = false;
+    toast.add({ severity: 'success', summary: 'Success', detail: 'Time entrie deleted', life: 3000 });
+  }catch (e) {
+    console.error(e.message);
+    toast.add({severity: 'error', summary: 'Error', detail: `Cannot delete time entrie please try again ${e.message} `, life: 3000});
+  }
+}
 
 
 onMounted(()=>{
@@ -101,7 +127,7 @@ onMounted(()=>{
     </Column>
   </DataTable>
 
-  <Dialog :visible="visibleModifyDialog" modal header="Edit Time Entrie">
+  <Dialog v-model:visible="visibleModifyDialog" modal header="Edit Time Entrie">
     <span class="text-surface-500 dark:text-surface-400 block mb-8">Update your entrie.</span>
     <div v-if="selectedTimeEntrie" class="flex flex-col gap-4">
       <div class="flex flex-col items-center gap-4 mb-4">
@@ -160,6 +186,13 @@ onMounted(()=>{
             </Select>
           </div>
         </div>
+      </div>
+      <div class="flex justify-end w-full">
+        <Button label="Delete this time entrie" severity="danger" icon="pi pi-trash" icon-pos="right" @click="handleDeleteTE" />
+      </div>
+      <div class="flex flex-row gap-2 *:w-full">
+          <Button label="Cancel" @click="visibleModifyDialog = false" severity="secondary" />
+          <Button label="Update" @click="handleUpdateTE" />
       </div>
     </div>
   </Dialog>

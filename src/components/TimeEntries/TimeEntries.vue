@@ -10,7 +10,7 @@ const timeEntriesStore = useTimeEntriesStore();
 </script>
 
 <template>
-  <Panel>
+  <div class="flex flex-col items-center gap-16">
     <transition name="slide-fade" mode="out-in">
       <div v-if="timeEntriesStore.currentTimeEntries" key="viewer">
         <TimeViewer />
@@ -20,15 +20,11 @@ const timeEntriesStore = useTimeEntriesStore();
       </div>
     </transition>
 
-    <div>
+    <div class="flex flex-col items-center gap-5">
+      <span class="opacity-60">Dernier entrées</span>
       <GetTimeEntries />
-<!--      <span>Dernier entrées {{timeEntriesStore.currentTimeEntries}}</span>-->
-
     </div>
-
-
-
-  </Panel>
+  </div>
 </template>
 
 <style scoped>

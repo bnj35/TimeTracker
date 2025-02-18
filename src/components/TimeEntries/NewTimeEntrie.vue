@@ -48,7 +48,7 @@ onMounted(()=>{
         </div>
         <div class="select-group flex flex-row items-center justify-center gap-2 flex-wrap w-full">
             <div class="flex justify-center">
-              <Select v-model="selectedProject" :options="projectsStore.projects" :invalid="!selectedProject && startPressed > 0" filter optionLabel="name" placeholder="Choisir un projet" class="w-full md:w-56">
+              <Select v-model="selectedProject" :options="projectsStore.projects.filter(project => project.is_enabled)" :invalid="!selectedProject && startPressed > 0" filter optionLabel="name" placeholder="Choisir un projet" class="w-full md:w-56">
                 <template #value="slotProps">
                   <div v-if="slotProps.value" class="flex items-center">
                     <div>{{ slotProps.value.name }}</div>

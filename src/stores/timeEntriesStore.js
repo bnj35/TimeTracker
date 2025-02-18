@@ -40,12 +40,24 @@ export const useTimeEntriesStore = defineStore("timeEntries", () => {
         return response;
     }
 
+    async function updateTimeEntries(timeEntry) {
+        const response = await api.patch("/api/time-entries/" + timeEntry.id, timeEntry);
+        return response;
+    }
+
+    async function deleteTimeEntries(id) {
+        const response = await api.delete("/api/time-entries/" + id);
+        return response;
+    }
+
     return {
         currentTimeEntries,
         startTimestamp,
         timeEntries,
         fetchTimeEntries,
         startTimeEntries,
+        updateTimeEntries,
+        deleteTimeEntries,
         closeTimeEntries
     };
 

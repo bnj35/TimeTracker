@@ -1,16 +1,59 @@
 <script setup>
-
+import { ref, watch } from 'vue';
 import Column from "primevue/column";
 import DataTable from "primevue/datatable";
 import Button from "primevue/button";
+import DatePicker from 'primevue/datepicker';
+import Fluid from "primevue/fluid";
 import {useTimeEntriesStore} from "@/stores/timeEntriesStore.js";
 import {useProjectsStore} from "@/stores/projectsStore.js";
 import {useActivityStore} from "@/stores/activityStore.js";
 import {onMounted} from "vue";
+import Dialog from "primevue/dialog";
+import Select from "primevue/select";
 
 const timeEntriesStore = useTimeEntriesStore();
 const projectsStore = useProjectsStore();
 const activityStore = useActivityStore();
+const visibleModifyDialog = ref(false);
+const selectedTimeEntrie = ref(
+  {
+    id: null,
+    project_id: null,
+    activity_id: null,
+    start: '',
+    end: ''
+  }
+);
+const modifiedProject = ref(null);
+const modifiedActivity = ref(null);
+
+const openModifyDialog = (timeEntrie) => {
+  selectedTimeEntrie.value = timeEntrie;
+  visibleModifyDialog.value = true;
+}
+
+const parseDate = (dateString) => {
+  if (!dateString || typeof dateString !== 'string') return new Date(); // Sécurise contre les erreurs
+  return new Date(dateString.replace(" ", "T"));
+};
+
+const startDate = ref(parseDate(selectedTimeEntrie.value.start));
+const endDate = ref(parseDate(selectedTimeEntrie.value.end));
+
+
+const formatDate = (date) => {
+  if (!date) return null;
+  return date.toISOString().slice(0, 19).replace("T", " "); // Date → "2025-02-14 02:08:10"
+};
+
+watch(startDate, (newVal) => {
+  selectedTimeEntrie.value.start = formatDate(newVal);
+});
+watch(endDate, (newVal) => {
+  selectedTimeEntrie.value.end = formatDate(newVal);
+});
+
 
 onMounted(()=>{
   timeEntriesStore.fetchTimeEntries();
@@ -23,17 +66,19 @@ onMounted(()=>{
 
 <template>
   <DataTable :value="timeEntriesStore.timeEntries" stripedRows :paginator="true" :rows="5" :rowsPerPageOptions="[5, 7, 10]">
+
+    <Column field="project" header="Projet">
+      <template #body="{ data }" v-if="projectsStore.projects">
+        {{ projectsStore.projects.find(project => project.id === data.project_id).name }}
+      </template>
+    </Column>
+
     <Column field="activity" header="Activité">
       <template #body="{ data }">
         <div class="flex flex-row items-center gap-2">
           <div :style="{backgroundColor: '#' + activityStore.activities.find(activity => activity.id === data.activity_id).color,}" class="w-2 h-2 rounded-full"></div>
           {{ activityStore.activities.find(activity => activity.id === data.activity_id).name }}
         </div>
-      </template>
-    </Column>
-    <Column field="project" header="Projet">
-      <template #body="{ data }">
-        {{ projectsStore.projects.find(project => project.id === data.project_id).name }}
       </template>
     </Column>
 
@@ -47,12 +92,77 @@ onMounted(()=>{
         {{ data.end }}
       </template>
     </Column>
-    <Column field="edit" header="edit">
+    <Column field="edit" header="">
       <template #body="{ data }">
-        <Button label="edit" />
+        <Button icon="pi pi-pen-to-square" severity="secondary" aria-label="Edit"
+        @click="() => openModifyDialog(data)"
+        />
       </template>
     </Column>
   </DataTable>
+
+  <Dialog :visible="visibleModifyDialog" modal header="Edit Time Entrie">
+    <span class="text-surface-500 dark:text-surface-400 block mb-8">Update your entrie.</span>
+    <div v-if="selectedTimeEntrie" class="flex flex-col gap-4">
+      <div class="flex flex-col items-center gap-4 mb-4">
+        <div class="flex flex-row gap-2 w-full">
+          <div class="flex flex-col items-start gap-2 w-full *:w-full">
+            <label for="startDate" class="text-sm opacity-60 pl-2">Start</label>
+              <DatePicker input-class="w-full" v-model="startDate" id="datepicker-24h" dateFormat="yy/mm/dd" showTime hourFormat="24" show-seconds input-id="startDate" />
+          </div>
+          <div class="flex flex-col items-start gap-2 w-full *:w-full">
+            <label for="endDate" class="text-sm opacity-60 pl-2">End</label>
+            <DatePicker v-model="endDate" id="datepicker-24h" dateFormat="yy/mm/dd" showTime hourFormat="24" fluid show-seconds input-id="endDate" />
+          </div>
+        </div>
+        <div class="flex flex-row gap-2">
+          <div class="flex flex-col items-start gap-2">
+            <label for="project" class="text-sm opacity-60 pl-2">Projet</label>
+            <Select v-model="modifiedProject" inputId="project" :options="projectsStore.projects" filter optionLabel="name" placeholder="Choisir un projet" class="w-full md:w-56">
+              <template #value="slotProps">
+                <span v-if="slotProps.value">
+                  {{ slotProps.value.name }}
+                </span>
+                <div v-else-if="selectedTimeEntrie.project_id" class="flex items-center">
+                  <div>{{ projectsStore.projects.find(project => project.id === selectedTimeEntrie.project_id).name }}</div>
+                </div>
+                <span v-else >
+                  {{ slotProps.placeholder }}
+                </span>
+              </template>
+              <template #option="slotProps">
+                <div class="flex items-center">
+                  <div>{{ slotProps.option.name}}</div>
+                </div>
+              </template>
+            </Select>
+          </div>
+
+          <div class="flex flex-col items-start gap-2">
+            <label for="activity" class="text-sm opacity-60 pl-2">Activity</label>
+            <Select v-model="modifiedActivity" inputId="activity" :options="activityStore.activities" filter optionLabel="name" placeholder="Choisir un projet" class="w-full md:w-56">
+              <template #value="slotProps">
+                <span v-if="slotProps.value">
+                  {{ slotProps.value.name }}
+                </span>
+                <div v-else-if="selectedTimeEntrie.project_id" class="flex items-center">
+                  <div>{{ activityStore.activities.find(activity => activity.id === selectedTimeEntrie.activity_id).name }}</div>
+                </div>
+                <span v-else >
+                  {{ slotProps.placeholder }}
+                </span>
+              </template>
+              <template #option="slotProps">
+                <div class="flex items-center">
+                  <div>{{ slotProps.option.name}}</div>
+                </div>
+              </template>
+            </Select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </Dialog>
 </template>
 
 <style scoped>

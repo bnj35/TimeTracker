@@ -6,7 +6,7 @@ export function useAPI() {
 
     const userStore = useUserStore();
     const token = userStore.user?.token;
-    const apiBase = import.meta.env.VITE_API_URL
+    const apiBase = import.meta.env.VITE_API_URL;
     const router = useRouter();
     const apikey = import.meta.env.VITE_API_KEY
 
@@ -19,6 +19,16 @@ export function useAPI() {
             'Authorization': `key=${apikey}`
         }
     });
+
+    // api.interceptors.response.use(
+    //     response => response,
+    //     error => {
+    //         if (error.response && error.response.status === 401) {
+    //             router.push('/login').then(r => r);
+    //         }
+    //         return Promise.reject(error);
+    //     }
+    // );
 
     return api;
 }

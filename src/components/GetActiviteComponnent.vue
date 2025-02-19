@@ -26,7 +26,6 @@ const GetActivity = async () => {
         if (response.error) {
             toast.add({ severity: 'error', summary: 'Error', detail: response.error.message, life: 3000 });
         } else {
-            toast.add({ severity: 'success', summary: 'Success', detail: 'Activities fetched', life: 3000 });
             activities.value = response.data;
         }
     } catch (e) {

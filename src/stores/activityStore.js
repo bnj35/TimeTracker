@@ -1,14 +1,11 @@
 import { defineStore } from "pinia";
 import { useAPI } from "@/composables/useAPI.js";
-import { ref } from "vue";
+import {computed, ref} from "vue";
 
 export const useActivityStore = defineStore("activity", () => {
   const api = useAPI();
 
-  const activities = ref({
-    name: "",
-    color: "",
-  });
+  const activities = ref([]);
 
   async function fetchActivities() {
     const response = await api.get("/api/activities");
@@ -17,6 +14,11 @@ export const useActivityStore = defineStore("activity", () => {
     }
     return response;
   }
+
+
+  const enabledActivities = computed(() => {
+    return activities.value.filter(activity => activity.is_enabled === 1);
+  });
 
   async function addActivity(name, color) {
     const response = await api.post("/api/activities", {
@@ -72,5 +74,6 @@ export const useActivityStore = defineStore("activity", () => {
     closeActivity,
     openActivity,
     activities,
+    enabledActivities
   };
 });

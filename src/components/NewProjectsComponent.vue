@@ -3,7 +3,6 @@ import { ref } from 'vue';
 import Panel from 'primevue/panel';
 import { Form } from '@primevue/forms';
 import InputText from 'primevue/inputtext';
-import ColorPicker from 'primevue/colorpicker';
 import Button from 'primevue/button';
 import { useProjectsStore } from '@/stores/projectsStore';
 import { useToast } from 'primevue/usetoast';
@@ -51,9 +50,9 @@ const createProjects = async () => {
 
 
 <template>
-    <Panel header="Nouveaux Projets" toggleable>
+    <Panel header="Nouveaux Projets" class=" w-full h-full">
         <Form @submit="createProjects" :resolver="resolver" :initialValues="values">
-            <div class="p-fluid">
+            <div class="p-fluid space-y-4">
                 <div class="p-field">
                     <InputText id="nom" type="text" v-model="values.name" placeholder="Nom" required="" />
                 </div>

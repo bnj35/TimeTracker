@@ -8,40 +8,76 @@ import { Dialog } from 'primevue';
 import { Tree } from 'primevue';
 import {useToast} from "primevue/usetoast";
 import {useWidgetStore} from "@/stores/widgetStore.js";
+import TerminalService from 'primevue/terminalservice';
+import  Terminal  from 'primevue/terminal';
+import { useUserStore } from '@/stores/userStore';
 
 const toast = useToast()
 const widgetStore = useWidgetStore()
 
 
 const displayFinder = ref(false);
+const displayTerminal = ref(false);
+
+const commandHandler = (text) => {
+    let response;
+    let argsIndex = text.indexOf(' ');
+    let command = argsIndex !== -1 ? text.substring(0, argsIndex) : text;
+
+    switch(command) {
+        case "date":
+            response = 'Today is ' + new Date().toDateString();
+            break;
+
+        case "greet":
+            response = 'Hola ' + text.substring(argsIndex + 1);
+            break;
+
+        case "random":
+            response = Math.floor(Math.random() * 100);
+            break;
+
+        default:
+            response = "Unknown command: " + command;
+    }
+
+    TerminalService.emit('response', response);
+};
 
 const items = ref([
     {
-        label: 'Finder',
+        label: 'Participants',
         icon: "https://primefaces.org/cdn/primevue//images/dock/finder.svg",
         command: () => {
             displayFinder.value = true;
         }
     },
     {
+        label: 'terminal',
+        icon: "https://primefaces.org/cdn/primevue//images/dock/terminal.svg",
+        command: () => {
+            displayTerminal.value = true;
+        }
+    },
+    {
       label: 'Activitées',
       icon: 'https://primefaces.org/cdn/primevue/images/dock/appstore.svg',
       command: () => {
-          widgetStore.toggleWidget({ name: 'getActivite', component: "getActiviteComponnent" }, {width: 800, height: 500});
+          widgetStore.toggleWidget({ name: 'getActivite', component: "getActiviteComponnent" }, {width: '100%', height: '100%'});
       }
     },
     {
       label: 'Projects',
       icon: 'https://primefaces.org/cdn/primevue/images/dock/photos.svg',
       command: () => {
-          widgetStore.toggleWidget({ name: 'getProjects', component: "getProjectsComponnent" }, {width: 800, height: 500});
+          widgetStore.toggleWidget({ name: 'getProjects', component: "getProjectsComponnent" }, {width: '100%', height: '100%'});
       }
     },
     {
       label: 'Suivi de l\'activité',
       icon: "https://help.apple.com/assets/65D68AF113D1B1E17703918B/65D68AF23650BFC92E07378A/fr_FR/381483cc8993a6ee5a017db0d5036117.png",
       command: () => {
-          widgetStore.toggleWidget({ name: 'TimeEntries', component: "TimeEntries" }, {width: 800, height: 500});
+          widgetStore.toggleWidget({ name: 'TimeEntries', component: "TimeEntries" }, {width: '100%', height: '100%'});
       }
     },
     {
@@ -62,11 +98,37 @@ const items = ref([
 
 const menubarItems = ref([
 {
-        label:'Profil',
         icon: 'pi pi-fw pi-user',
-        command: () => {
-            widgetStore.toggleWidget({ name: 'profile', component: "profileComponnent" }, {width: 800, height: 500});
-        }
+        items: [
+            {
+                label: 'Connexion',
+                icon: 'pi pi-fw pi-sign-in',
+                command: () => {
+                    widgetStore.toggleWidget({ name: 'Login', component: "LoginComponent" }, {width: '100%', height: '100%'});
+                }
+            },
+            {
+                label: 'Inscription',
+                icon: 'pi pi-fw pi-user-plus',
+                command: () => {
+                    widgetStore.toggleWidget({ name: 'Register', component: "RegisterComponent" }, {width: '100%', height: '100%'});
+                }
+            },
+            {
+                label: 'Profil',
+                icon: 'pi pi-fw pi-user',
+                command: () => {
+                    widgetStore.toggleWidget({ name: 'Profile', component: "ProfilWindowComponent" }, {width: '100%', height: '100%'});
+                }
+            },
+            {
+                label: 'Déconnexion',
+                icon: 'pi pi-fw pi-power-off',
+                command: () => {
+                    useUserStore().logout();
+                }
+            },
+        ]
     },
     {
         label: 'Projets',
@@ -76,7 +138,7 @@ const menubarItems = ref([
                 label: 'Nouveau',
                 icon: 'pi pi-fw pi-plus',
                 command: () => {
-                    widgetStore.toggleWidget({ name: 'newProjects', component: "newProjectsComponnet" }, {width: 800, height: 500});
+                    widgetStore.toggleWidget({ name: 'newProjects', component: "newProjectsComponnet" }, {width: '100%', height: '100%'});
                 }
             },
         ]
@@ -88,7 +150,7 @@ const menubarItems = ref([
                 label: 'Nouvelle',
                 icon: 'pi pi-fw pi-plus',
                 command: () => {
-                widgetStore.toggleWidget({ name: 'newActivite', component: "newActiviteComponnent" }, {width: 800, height: 500});
+                widgetStore.toggleWidget({ name: 'newActivite', component: "newActiviteComponnent" }, {width: '100%', height: '100%'});
                 }
             }
         ]
@@ -118,6 +180,14 @@ const onDockItemClick = (event, item) => {
     event.preventDefault();
 };
 
+onBeforeUnmount(() => {
+    TerminalService.off('command', commandHandler);
+})
+
+onMounted(() => {
+    TerminalService.on('command', commandHandler);
+})
+
 </script>
 
 <template>
@@ -131,13 +201,19 @@ const onDockItemClick = (event, item) => {
                     </template>
                 </Dock>
 
-                <Dialog v-model:visible="displayFinder" header="Finder" :breakpoints="{ '960px': '50vw' }" :style="{ width: '40vw' }" :maximizable="true">
-                    <Tree :value="nodes" />
+                <Dialog v-model:visible="displayTerminal" header="Terminal" :breakpoints="{ '960px': '50vw' }" :style="{ width: '40vw' }" :maximizable="true">
+                    <Terminal welcomeMessage="Welcome to PrimeVue(cmd: 'date', 'greet {0}' and 'random')" prompt="primevue $" />
+                </Dialog>
+
+                <Dialog v-model:visible="displayFinder" header="Participants" :breakpoints="{ '960px': '50vw' }" :style="{ width: '40vw' }" :maximizable="true">
+                    <p>Antoine RUBEO-LISA</p>
+                    <p>Benjamin AUGER</p>
+                    <p>Vadim KHENFER</p>
                 </Dialog>
 
                 <Menubar :model="menubarItems">
                 <template #start class="menubar-start">
-                    <RouterLink :to="{ name: 'home' }"><i class="pi pi-apple px-2"></i></RouterLink> 
+                    <RouterLink :to="{ name: 'home' }"><i class="pi pi-apple px-2 text-primary-950"></i></RouterLink> 
                 </template>
                 <template #end class="menubar-end">
                     <i class="pi pi-video px-2"/>

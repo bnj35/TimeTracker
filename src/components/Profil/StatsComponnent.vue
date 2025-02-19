@@ -1,16 +1,18 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-// import { Chart } from 'chart.js';
+import { ref, onMounted, watch } from 'vue';
 import PrimeVue from 'primevue/config';
 import Calendar from 'primevue/calendar';
 import Button from 'primevue/button';
+import Dropdown from 'primevue/dropdown';
 import { useToast } from 'primevue';
+import { useTimeEntriesStore } from '@/stores/timeEntriesStore';
 import { useAPI } from '@/composables/useAPI';
+import { Chart, registerables } from 'chart.js';
 
-
-const api = useAPI();
+Chart.register(...registerables);
 
 const toast = useToast();
+const api = useAPI();
 const startDate = ref(new Date());
 const endDate = ref(new Date());
 const totalTimeWorked = ref(0);
@@ -19,63 +21,96 @@ const activityDistribution = ref(null);
 const projectsCount = ref(0);
 const selectedProject = ref(null);
 const timeEntries = ref([]);
+const projects = ref([{ id: null, name: 'All Projects' }]);
+
+const timeEntriesStore = useTimeEntriesStore();
+
+let projectChart = null;
+let activityChart = null;
+
+const fetchProjects = async () => {
+  try {
+    const response = await api.get("/api/projects");
+    projects.value = [{ id: null, name: 'All Projects' }, ...response.data];
+  } catch (error) {
+    toast.add({ severity: 'error', summary: 'Error', detail: 'Error fetching projects', life: 3000 });
+  }
+};
 
 const fetchData = async () => {
-try {
-    // const response = await api.get('/stats', {
-    //     params: {
-    //         startDate: startDate.value.toISOString(),
-    //         endDate: endDate.value.toISOString(),
-    //     },
-    // });
-
-    totalTimeWorked.value = response.data.totalTimeWorked;
-    projectDistribution.value = response.data.projectDistribution;
-    activityDistribution.value = response.data.activityDistribution;
-    projectsCount.value = response.data.projectsCount;
-    timeEntries.value = response.data.timeEntries;
+  try {
+    const stats = await timeEntriesStore.fetchTimeEntriesStats(startDate.value, endDate.value, selectedProject.value?.id);
+    totalTimeWorked.value = stats.totalTimeWorked;
+    projectDistribution.value = stats.projectDistribution;
+    activityDistribution.value = stats.activityDistribution;
+    projectsCount.value = stats.projectsCount;
+    timeEntries.value = stats.timeEntries;
 
     // Update charts
-    const projectChartCtx = document.getElementById('projectChart').getContext('2d');
-    new Chart(projectChartCtx, {
-        type: 'pie',
-        data: projectDistribution.value,
-    });
+    if (projectChart) {
+      projectChart.destroy();
+    }
+    if (activityChart) {
+      activityChart.destroy();
+    }
 
-    const activityChartCtx = document.getElementById('activityChart').getContext('2d');
-    new Chart(activityChartCtx, {
-        type: 'pie',
-        data: activityDistribution.value,
-    });
+    if (!selectedProject.value) {
+      const projectChartCtx = document.getElementById('projectChart').getContext('2d');
+      projectChart = new Chart(projectChartCtx, {
+          type: 'pie',
+          data: projectDistribution.value,
+      });
+    } else {
+      const activityChartCtx = document.getElementById('activityChart').getContext('2d');
+      activityChart = new Chart(activityChartCtx, {
+          type: 'pie',
+          data: activityDistribution.value,
+      });
+    }
   } catch (error) {
     toast.add({ severity: 'error', summary: 'Error', detail: 'Error during fetch data', life: 3000 });
   }
 };
 
 onMounted(() => {
+  fetchProjects();
   fetchData();
 });
+
+watch([startDate, endDate, selectedProject], fetchData);
 </script>
 
 <template>
-  <div class="w-full h-full">
+  <div class="w-full h-full flex space-x-4 mt-8">
     <h2>Statistics</h2>
-    <div class="filters">
+    <div class="filters flex flex-col space-y-2">
       <Calendar v-model="startDate" placeholder="Start Date" />
       <Calendar v-model="endDate" placeholder="End Date" />
+      <Dropdown v-model="selectedProject" :options="projects" optionLabel="name" placeholder="Select a Project" />
       <Button label="Apply Filters" @click="fetchData" />
     </div>
     <div class="statistics">
       <p>Total Time Worked: {{ totalTimeWorked }} hours</p>
-      <p>Number of Projects: {{ projectsCount }}</p>
-      <canvas id="projectChart"></canvas>
-      <canvas id="activityChart"></canvas>
+      <p v-if="!selectedProject">Number of Projects: {{ projectsCount }}</p>
+      <div class="chart">
+      <canvas id="projectChart" v-if="!selectedProject && projectDistribution" width="100" height="100"></canvas>
+      <canvas id="activityChart" v-if="selectedProject && activityDistribution" width="100" height="100"></canvas>
     </div>
-    <div class="time-entries">
-      <h3>Time Entries</h3>
-      <ul>
-        <li v-for="entry in timeEntries" :key="entry.id">{{ entry }}</li>
-      </ul>
     </div>
   </div>
 </template>
+
+<style scoped>
+canvas {
+  display: none;
+}
+canvas[v-if] {
+  display: block;
+}
+
+.chart{
+  height: 30vh;
+  width: 30vw;
+  margin: 0 auto;
+}
+</style>

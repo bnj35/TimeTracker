@@ -6,8 +6,7 @@ import Panel from 'primevue/panel';
 </script>
 
 <template>
-    <Panel class="flex flex-col gap-4  w-full h-full">
-
+    <Panel class="flex flex-col w-full h-full p-0" header="Profil">
         <ProfilComponnent />
         <StatsComponnent />
     </Panel>

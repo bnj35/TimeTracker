@@ -14,14 +14,15 @@ const formattedElapsedTime = computed(() => {
   const seconds = elapsedTime.value % 60;
   const minutes = Math.floor(elapsedTime.value / 60) % 60;
   const hours = Math.floor(elapsedTime.value / 3600);
-  return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+  return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds - 22).padStart(2, '0')}`;
+  //for obscure reasons, the seconds are 22 seconds ahead of the actual time
 });
 
 const updateElapsedTime = () => {
-  console.log('updateElapsedTime');
   if (!timeEntriesStore.startTimestamp) return;
   const now = Date.now();
   elapsedTime.value = Math.floor((now - timeEntriesStore.startTimestamp) / 1000);
+  console.log('updateElapsedTime', formattedElapsedTime.value);
 };
 
 onMounted(() => {
@@ -30,7 +31,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  clearInterval(interval); // Nettoyage pour éviter les fuites de mémoire
+  clearInterval(interval);
 });
 
 const handleCloseTimeEntries = async () => {

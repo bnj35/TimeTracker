@@ -1,14 +1,12 @@
 import { defineStore } from "pinia";
 import { useAPI } from "@/composables/useAPI.js";
-import { ref } from "vue";
+import {computed, ref} from "vue";
 
 export const useProjectsStore = defineStore("projects", () => {
   const api = useAPI();
 
-  const projects = ref({
-    name: "",
-    description: "",
-  });
+  const projects = ref([]);
+
 
   async function fetchProjects() {
     const response = await api.get("/api/projects");

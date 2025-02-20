@@ -6,8 +6,11 @@ import 'primeicons/primeicons.css'
 import { RouterLink } from 'vue-router';
 import { Dialog } from 'primevue';
 import { Tree } from 'primevue';
+import {useToast} from "primevue/usetoast";
+import {useWidgetStore} from "@/stores/widgetStore.js";
 
-
+const toast = useToast()
+const widgetStore = useWidgetStore()
 
 
 const displayFinder = ref(false);
@@ -21,23 +24,50 @@ const items = ref([
         }
     },
     {
-        label: 'App Store',
-        icon: 'https://primefaces.org/cdn/primevue/images/dock/appstore.svg'
+      label: 'Activitées',
+      icon: 'https://primefaces.org/cdn/primevue/images/dock/appstore.svg',
+      command: () => {
+          widgetStore.toggleWidget({ name: 'getActivite', component: "getActiviteComponnent" }, {width: 800, height: 500});
+      }
     },
     {
-        label: 'Photos',
-        icon: 'https://primefaces.org/cdn/primevue/images/dock/photos.svg'
+      label: 'Projects',
+      icon: 'https://primefaces.org/cdn/primevue/images/dock/photos.svg',
+      command: () => {
+          widgetStore.toggleWidget({ name: 'getProjects', component: "getProjectsComponnent" }, {width: 800, height: 500});
+      }
     },
     {
-        label: 'Trash',
-        icon: "https://primefaces.org/cdn/primevue//images/dock/trash.png",
+      label: 'Suivi de l\'activité',
+      icon: "https://help.apple.com/assets/65D68AF113D1B1E17703918B/65D68AF23650BFC92E07378A/fr_FR/381483cc8993a6ee5a017db0d5036117.png",
+      command: () => {
+          widgetStore.toggleWidget({ name: 'TimeEntries', component: "TimeEntries" }, {width: 800, height: 500});
+      }
+    },
+    {
+        label: 'GitHub',
+        icon: "https://primefaces.org/cdn/primevue//images/dock/github.svg",
         command: () => {
-            toast.add({ severity: 'info', summary: 'Empty Trash', life: 3000 });
-        }
+            window.open('https://github.com/bnj35/TimeTracker', '_blank');
+    },
+    },
+    {
+      label: 'Trash',
+      icon: "https://primefaces.org/cdn/primevue//images/dock/trash.png",
+      command: () => {
+          toast.add({ severity: 'info', summary: 'Empty Trash', life: 3000 });
+      }
     }
 ]);
 
 const menubarItems = ref([
+{
+        label:'Profil',
+        icon: 'pi pi-fw pi-user',
+        command: () => {
+            widgetStore.toggleWidget({ name: 'profile', component: "profileComponnent" }, {width: 800, height: 500});
+        }
+    },
     {
         label: 'Projets',
         class: 'menubar-root',
@@ -45,25 +75,10 @@ const menubarItems = ref([
             {
                 label: 'Nouveau',
                 icon: 'pi pi-fw pi-plus',
-                items: [
-                    {
-                        label: 'Bookmark',
-                        icon: 'pi pi-fw pi-bookmark'
-                    },
-                    {
-                        label: 'Video',
-                        icon: 'pi pi-fw pi-video'
-                    },
-
-                ]
+                command: () => {
+                    widgetStore.toggleWidget({ name: 'newProjects', component: "newProjectsComponnet" }, {width: 800, height: 500});
+                }
             },
-            {
-                separator: true
-            },
-            {
-                label: 'Supprimer',
-                icon: 'pi pi-fw pi-trash'
-            }
         ]
     },
     {
@@ -71,55 +86,10 @@ const menubarItems = ref([
         items: [
             {
                 label: 'Nouvelle',
-                icon: 'pi pi-fw pi-plus'
-            },
-            {
-                label: 'Supprimer',
-                icon: 'pi pi-fw pi-align-right'
-            },
-            {
-                label: 'Rechercher',
-                icon: 'pi pi-fw pi-search',
-                items: [
-                    {
-                        label: 'Filtrer',
-                        icon: 'pi pi-fw pi-filter'
-                    },
-                    {
-                        icon: 'pi pi-fw pi-bars',
-                        label: 'Liste'
-                    }
-                ]
-            }
-
-        ]
-    },
-    {
-        label: 'Profil',
-        items: [
-            {
-                label: 'Modifer',
-                icon: 'pi pi-fw pi-pencil',
-                items: [
-                    {
-                        label: 'Save',
-                        icon: 'pi pi-fw pi-calendar-plus'
-                    },
-                    {
-                        label: 'Delete',
-                        icon: 'pi pi-fw pi-calendar-minus'
-                    }
-                ]
-            },
-            {
-                label: 'Archive',
-                icon: 'pi pi-fw pi-calendar-times',
-                items: [
-                    {
-                        label: 'Remove',
-                        icon: 'pi pi-fw pi-calendar-minus'
-                    }
-                ]
+                icon: 'pi pi-fw pi-plus',
+                command: () => {
+                widgetStore.toggleWidget({ name: 'newActivite', component: "newActiviteComponnent" }, {width: 800, height: 500});
+                }
             }
         ]
     }

@@ -49,7 +49,7 @@ const items = ref([
         icon: "https://primefaces.org/cdn/primevue//images/dock/github.svg",
         command: () => {
             window.open('https://github.com/bnj35/TimeTracker', '_blank');
-    },
+        }
     },
     {
       label: 'Trash',
@@ -57,7 +57,14 @@ const items = ref([
       command: () => {
           toast.add({ severity: 'info', summary: 'Empty Trash', life: 3000 });
       }
+    },
+  {
+    label: 'Terminal',
+    icon: 'https://help.apple.com/assets/65DFB7A79DFEC61A7A0517AC/65DFB7A793CD15C0410BA37D/fr_FR/d94aa1c4979b25e9ffbda97fcbae219a.png',
+    command: () =>{
+        widgetStore.toggleWidget({ name: 'MainTerminal', component: "MainTerminal" }, {width: 800});
     }
+  }
 ]);
 
 const menubarItems = ref([

@@ -1,7 +1,7 @@
 import App from "./App.vue";
 import router from "./router";
 import "./assets/main.css";
-import { createApp, watch } from "vue";
+import { createApp } from "vue";
 import { createPinia } from "pinia";
 import piniaPersist from "pinia-plugin-persist";
 import PrimeVue from "primevue/config";
@@ -14,7 +14,7 @@ import GetActiviteComponnent from "@/components/GetActiviteComponnent.vue";
 import TimeEntries from "@/components/TimeEntries/TimeEntries.vue";
 import NewActiviteComponnent from "./components/NewActiviteComponnent.vue";
 import NewProjectsComponent from "./components/NewProjectsComponent.vue";
-
+import MainTerminal from "@/components/MainTerminal.vue";
 
 const app = createApp(App);
 
@@ -35,11 +35,13 @@ app.use(PrimeVue, {
 
 //need to register all component here in order to use them in the widget store
 //otherwise they trigger warnings
+app.component('profileComponnent', )
 app.component("GetProjectsComponnent", GetProjectsComponnent);
 app.component("GetActiviteComponnent", GetActiviteComponnent);
 app.component("newActiviteComponnent", NewActiviteComponnent);
 app.component("newProjectsComponnet", NewProjectsComponent);
 app.component("TimeEntries", TimeEntries);
+app.component('MainTerminal', MainTerminal)
 
 //--------------------
 app.use(ToastService);

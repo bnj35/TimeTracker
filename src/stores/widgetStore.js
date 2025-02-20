@@ -2,6 +2,7 @@
 import { defineStore } from "pinia";
 import {ref, shallowRef} from "vue";
 import { useLocalStorage } from "@vueuse/core";
+import { Toast } from "primevue";
 
 export const useWidgetStore = defineStore(
     "widget",
@@ -55,6 +56,24 @@ export const useWidgetStore = defineStore(
             if (widget) Object.assign(widget, updates);
         }
 
+        function maximizeWidget(name) {
+            const widget = openWidgets.value.find(w => w.componentEntry.name === name);
+            if (widget.fullscreen != true) {
+                widget.x = 0;
+                widget.y = 0;
+                widget.width = window.innerWidth;
+                widget.height = window.innerHeight;
+                widget.fullscreen = true;
+            }else{
+                widget.x = window.innerWidth/5;
+                widget.y = window.innerHeight/5;
+                widget.width = 500;
+                widget.height = 300;
+
+                widget.fullscreen = false;
+            }
+        }
+
         return {
             openWidgets,
             getWidget,
@@ -64,6 +83,7 @@ export const useWidgetStore = defineStore(
             removeWidget,
             updateWidget,
             updateWidgetPosition,
+            maximizeWidget,
             zIndexCounter,
         };
     }

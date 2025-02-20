@@ -92,7 +92,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <Panel header="Vos activités" toggleable>
+    <Panel header="Vos activités" class=" w-full h-full">
         <Toast />
         <DataTable :value="activities" stripedRows :paginator="true" :rows="5" :rowsPerPageOptions="[5, 7, 10]">
             <Column field="name" header="Nom"></Column>

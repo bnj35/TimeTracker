@@ -1,7 +1,6 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { useWidgetStore } from "@/stores/widgetStore.js";
-import Button from 'primevue/button';
 
 const widgetStore = useWidgetStore();
 
@@ -99,7 +98,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div v-if="widgetData" class="absolute p-panel p-1 shadow-lg border border-gray-300 rounded-xl flex flex-col" :style="{
+  <div v-if="widgetData" class="absolute bg-surface-900 p-1 shadow-lg border border-surface-500 rounded-xl flex flex-col" :style="{
     top: widgetData.y + 'px',
     left: widgetData.x + 'px',
     width: widgetData.width + 'px',

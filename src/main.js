@@ -17,6 +17,7 @@ import NewProjectsComponent from "./components/NewProjectsComponent.vue";
 import LoginComponent from "./components/Profil/LoginComponent.vue";
 import RegisterComponent from "./components/Profil/RegisterComponent.vue";
 import ProfilWindowComponent from "./components/Profil/ProfilWindowComponent.vue";
+import MainTerminal from "@/components/MainTerminal.vue";
 
 
 const app = createApp(App);
@@ -55,7 +56,7 @@ app.use(PrimeVue, {
 
   },
 });
-//need to register all component here in order to use them in the widget store
+//need to register all component here, to use them in the widget store
 //otherwise they trigger warnings
 app.component("GetProjectsComponnent", GetProjectsComponnent);
 app.component("GetActiviteComponnent", GetActiviteComponnent);
@@ -65,6 +66,7 @@ app.component("LoginComponent", LoginComponent);
 app.component("RegisterComponent", RegisterComponent);
 app.component("TimeEntries", TimeEntries);
 app.component("ProfilWindowComponent", ProfilWindowComponent);
+app.component("MainTerminal", MainTerminal);
 
 //--------------------
 app.use(ToastService);

@@ -28,10 +28,10 @@ const commandHandler = (text) => {
       //print a table of projects with their name, description status and id
       response = projectStore.projects.map(project => {
         const name = project.name.padEnd(20, '-');
-        const description = project.description.padEnd(30, 's');
-        const id = project.id.toString().padEnd(5, '>');
-        return `${name} ${description} ${id}`;
-      }).join('\n');
+        const description = project.description.padEnd(30, '-');
+        const id = project.id.toString().padEnd(5, '-');
+        return `${name} ${description} ${id} \n`;
+      }).join('');
       break;
     case "date":
       response = 'Today is ' + new Date().toDateString();
@@ -58,7 +58,7 @@ const commandHandler = (text) => {
 
   <div class="terminal-container">
     <Terminal
-        welcomeMessage="😎Welcome on time-tracker terminal"
+        welcomeMessage="Welcome on time-tracker terminal"
         :prompt="userStore.user.name+'@time-tracker $'"
         aria-label="PrimeVue Terminal Service"
     />
@@ -67,10 +67,6 @@ const commandHandler = (text) => {
 </template>
 
 <style scoped>
-p-terminal {
-  height: 100%;
-  white-space: pre-wrap;
-}
 .terminal-container{
   font-family: "Courier New", Courier, monospace;
 }

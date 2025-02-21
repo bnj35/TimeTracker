@@ -39,22 +39,11 @@
 //   if (newProjectsRef.value) setRandomPosition(newProjectsRef.value, 'newProjects');
 // });
 
-import { ref, onMounted, resolveComponent} from 'vue';
 import NavbarComponnent from '@/components/NavbarComponnent.vue';
 import Window from "@/components/Window.vue";
-import GetProjectsComponnent from "@/components/GetProjectsComponnent.vue";
 import { useWidgetStore } from '@/stores/widgetStore.js';
-import Button from 'primevue/button';
 
 const widgetStore = useWidgetStore();
-
-const toggleProjects = () => {
-  widgetStore.toggleWidget({ name: 'GetProjectsComponnent', component: "GetProjectsComponnent" }, {width: '100%', height: '100%'});
-};
-
-const toggleActivities = ()=>{
-  widgetStore.toggleWidget({ name: 'GetActiviteComponnent', component: "GetActiviteComponnent" }, {width: '100%', height: '100%'});
-}
 
 </script>
 

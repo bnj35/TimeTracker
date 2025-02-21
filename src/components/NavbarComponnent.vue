@@ -56,7 +56,7 @@ const items = ref([
         label: 'terminal',
         icon: "https://primefaces.org/cdn/primevue//images/dock/terminal.svg",
         command: () => {
-            displayTerminal.value = true;
+          widgetStore.toggleWidget({ name: 'MainTerminal', component: "MainTerminal" }, {width: '100%', height: '100%'});
         }
     },
     {

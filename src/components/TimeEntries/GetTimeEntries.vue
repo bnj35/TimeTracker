@@ -30,6 +30,9 @@ const selectedTimeEntrie = ref(
 const modifiedProject = ref(null);
 const modifiedActivity = ref(null);
 
+const loadingData = ref(true);
+const loadingError = ref(false);
+
 const openModifyDialog = (timeEntrie) => {
   selectedTimeEntrie.value = timeEntrie;
   visibleModifyDialog.value = true;
@@ -80,53 +83,79 @@ const handleDeleteTE = async () => {
   }
 }
 
+async function fetchData() {
+  loadingData.value = true;
+  await projectsStore.fetchProjects();
+  await activityStore.fetchActivities();
+  await timeEntriesStore.fetchTimeEntries();
+  loadingData.value = false;
+}
 
-onMounted(()=>{
-  timeEntriesStore.fetchTimeEntries();
-  projectsStore.fetchProjects();
-  activityStore.fetchActivities();
+
+onMounted(async ()=>{
+  try {
+    await fetchData();
+  }catch (e) {
+    console.error(e.message);
+    loadingError.value = true;
+    loadingData.value = false;
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: `Cannot fetch data please try again ${e.message} `,
+      life: 3000
+    });
+  }
 })
 
 
 </script>
 
 <template>
-  <DataTable :value="timeEntriesStore.timeEntries" stripedRows :paginator="true" :rows="5" :rowsPerPageOptions="[5, 7, 10]">
+  <div v-if="loadingData" class="w-full p-4 flex items-center justify-center">
+    <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+  </div>
+  <div v-else-if="loadingError" class="w-full p-4 flex flex-col gap-4 items-center justify-center">
+    <span class="text-red-500/50">Error loading data</span>
+    <Button label="Retry" severity="secondary" icon="pi pi-refresh" @click="fetchData" />
+  </div>
+  <div v-else>
+    <DataTable :value="timeEntriesStore.timeEntries" stripedRows :paginator="true" :rows="5" :rowsPerPageOptions="[5, 7, 10]">
 
-    <Column field="project" header="Projet">
-      <template #body="{ data }" v-if="projectsStore.projects">
-        {{ projectsStore.projects.find(project => project.id === data.project_id).name }}
-      </template>
-    </Column>
+      <Column field="project" header="Projet">
+        <template #body="{ data }" v-if="projectsStore.projects">
+          {{ projectsStore.projects.find(project => project.id === data.project_id).name }}
+        </template>
+      </Column>
 
-    <Column field="activity" header="Activité">
-      <template #body="{ data }">
-        <div class="flex flex-row items-center gap-2">
-          <div :style="{backgroundColor: '#' + activityStore.activities.find(activity => activity.id === data.activity_id).color,}" class="w-2 h-2 rounded-full"></div>
-          {{ activityStore.activities.find(activity => activity.id === data.activity_id).name }}
-        </div>
-      </template>
-    </Column>
+      <Column field="activity" header="Activité">
+        <template #body="{ data }">
+          <div class="flex flex-row items-center gap-2">
+            <div :style="{backgroundColor: '#' + activityStore.activities.find(activity => activity.id === data.activity_id).color,}" class="w-2 h-2 rounded-full"></div>
+            {{ activityStore.activities.find(activity => activity.id === data.activity_id).name }}
+          </div>
+        </template>
+      </Column>
 
-    <Column field="start" header="start">
-      <template #body="{ data }">
-        {{ data.start }}
-      </template>
-    </Column>
-    <Column field="end" header="end">
-      <template #body="{ data }">
-        {{ data.end }}
-      </template>
-    </Column>
-    <Column field="edit" header="">
-      <template #body="{ data }">
-        <Button icon="pi pi-pen-to-square" severity="secondary" aria-label="Edit"
-        @click="() => openModifyDialog(data)"
-        />
-      </template>
-    </Column>
-  </DataTable>
-
+      <Column field="start" header="start">
+        <template #body="{ data }">
+          {{ data.start }}
+        </template>
+      </Column>
+      <Column field="end" header="end">
+        <template #body="{ data }">
+          {{ data.end }}
+        </template>
+      </Column>
+      <Column field="edit" header="">
+        <template #body="{ data }">
+          <Button icon="pi pi-pen-to-square" severity="secondary" aria-label="Edit"
+          @click="() => openModifyDialog(data)"
+          />
+        </template>
+      </Column>
+    </DataTable>
+  </div>
   <Dialog v-model:visible="visibleModifyDialog" modal header="Edit Time Entrie">
     <span class="text-surface-500 dark:text-surface-400 block mb-8">Update your entrie.</span>
     <div v-if="selectedTimeEntrie" class="flex flex-col gap-4">

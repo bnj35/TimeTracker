@@ -19,6 +19,10 @@ const widgetStore = useWidgetStore()
 const displayFinder = ref(false);
 const displayTerminal = ref(false);
 
+//get window width / 2
+let windowHalfWidth;
+let  windowHalfHeight;
+
 const commandHandler = (text) => {
     let response;
     let argsIndex = text.indexOf(' ');
@@ -63,21 +67,21 @@ const items = ref([
       label: 'Activitées',
       icon: 'https://primefaces.org/cdn/primevue/images/dock/appstore.svg',
       command: () => {
-          widgetStore.toggleWidget({ name: 'getActivite', component: "getActiviteComponnent" }, {width: '100%', height: '100%'});
+          widgetStore.toggleWidget({ name: 'getActivite', component: "getActiviteComponnent" }, {width: windowHalfWidth, height: windowHalfHeight});
       }
     },
     {
       label: 'Projects',
       icon: 'https://primefaces.org/cdn/primevue/images/dock/photos.svg',
       command: () => {
-          widgetStore.toggleWidget({ name: 'getProjects', component: "getProjectsComponnent" }, {width: '100%', height: '100%'});
+          widgetStore.toggleWidget({ name: 'getProjects', component: "getProjectsComponnent" }, {});
       }
     },
     {
       label: 'Suivi de l\'activité',
       icon: "https://help.apple.com/assets/65D68AF113D1B1E17703918B/65D68AF23650BFC92E07378A/fr_FR/381483cc8993a6ee5a017db0d5036117.png",
       command: () => {
-          widgetStore.toggleWidget({ name: 'TimeEntries', component: "TimeEntries" }, {width: '100%', height: '100%'});
+          widgetStore.toggleWidget({ name: 'TimeEntries', component: "TimeEntries" }, {});
       }
     },
     {
@@ -91,7 +95,7 @@ const items = ref([
       label: 'Trash',
       icon: "https://primefaces.org/cdn/primevue//images/dock/trash.png",
       command: () => {
-          toast.add({ severity: 'info', summary: 'Empty Trash', life: 3000 });
+          toast.add({ severity: 'info', summary: 'Empty Trash', life: 3000 }, {});
       }
     }
 ]);
@@ -182,6 +186,8 @@ const onDockItemClick = (event, item) => {
 
 onBeforeUnmount(() => {
     TerminalService.off('command', commandHandler);
+    windowHalfWidth = window.innerWidth / 2;
+    windowHalfHeight = window.innerHeight / 2;
 })
 
 onMounted(() => {

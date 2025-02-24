@@ -22,7 +22,6 @@ const updateElapsedTime = () => {
   if (!timeEntriesStore.startTimestamp) return;
   const now = Date.now();
   elapsedTime.value = Math.floor((now - timeEntriesStore.startTimestamp) / 1000);
-  console.log('updateElapsedTime', formattedElapsedTime.value);
 };
 
 onMounted(() => {
@@ -48,7 +47,7 @@ const handleCloseTimeEntries = async () => {
 </script>
 
 <template>
-  <div class="flex flex-row items-center justify-center gap-4">
+  <div class="flex flex-row items-center justify-center gap-4 w-full">
     <Button @click="handleCloseTimeEntries" icon="pi pi-pause" severity="Secondary" variant="outlined" size="large" rounded class="!p-8 hover:scale-110	active:scale-100 !transition-all !duration-75	"/>
     <div class="flex flex-col items-start gap-2">
       <span class="text-3xl font-bold">

@@ -1,12 +1,11 @@
 // src/stores/widgetStore.js
 import { defineStore } from "pinia";
-import {ref, shallowRef} from "vue";
-import { useLocalStorage } from "@vueuse/core";
-import { Toast } from "primevue";
+import {ref} from "vue";
 
 export const useWidgetStore = defineStore(
     "widget",
     () => {
+
         // const openWidgets = useLocalStorage('widgets', []);
         const openWidgets = ref([]);
         const zIndexCounter = ref(0);
@@ -15,7 +14,7 @@ export const useWidgetStore = defineStore(
             return openWidgets.value.find(w => w.componentEntry.name === name);
         }
 
-        function toggleWidget(componentEntry,  { x= 100, y= 100, width= 300, height= 200 }) {
+        function toggleWidget(componentEntry,  { x= 100, y= 100, width= 600, height= 450 }) {
             const currentWidget = openWidgets.value.find(w => w.componentEntry.name === componentEntry.name);
             if (currentWidget) {
                 removeWidget(currentWidget.componentEntry.name);
@@ -47,7 +46,6 @@ export const useWidgetStore = defineStore(
             if (index !== -1) {
                 openWidgets.value[index].x = left;
                 openWidgets.value[index].y = top;
-                openWidgets.value[index].zIndex = zIndexCounter.value++;
             }
         }
 

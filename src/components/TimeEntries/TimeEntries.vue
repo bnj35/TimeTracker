@@ -11,8 +11,8 @@ const timeEntriesStore = useTimeEntriesStore();
 
 <template>
   <div class="flex flex-col items-center gap-16">
-    <transition name="slide-fade" mode="out-in">
-      <div v-if="timeEntriesStore.currentTimeEntries" key="viewer">
+    <transition name="slide-fade" mode="out-in" class="w-full">
+      <div v-if="timeEntriesStore.currentTimeEntries" key="viewer" class="w-full">
         <TimeViewer />
       </div>
       <div v-else>

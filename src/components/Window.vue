@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { useWidgetStore } from "@/stores/widgetStore.js";
 import Button from 'primevue/button';
 
@@ -25,9 +25,11 @@ const startDrag = (event) => {
   isDragging.value = true;
   widgetStore.bringToFront(props.widgetName);
   dragOffset.value = { x: event.clientX - widgetData.x, y: event.clientY - widgetData.y };
+  console.log('start draging');
 };
 
 const onDrag = (event) => {
+  document.body.classList.add('select-none');
   if (isDragging.value) {
     widgetStore.updateWidgetPosition(props.widgetName,
       event.clientX - dragOffset.value.x,
@@ -36,7 +38,10 @@ const onDrag = (event) => {
   }
 };
 
-const stopDrag = () => (isDragging.value = false);
+const stopDrag = () => {
+  isDragging.value = false
+  document.body.classList.remove('select-none');
+};
 
 const closeWindow = () => {
   widgetStore.removeWidget(props.widgetName);
@@ -109,24 +114,16 @@ onUnmounted(() => {
     <div class="text-white p-1 cursor-move flex justify-between items-center rounded-t-lg" @mousedown="startDrag">
       <span>{{ title }}</span>
       <div class="flex space-x-1">
-        <span @click="maxWindow"
-        class="text-primary-950 hover:bg-red-500 hover:text-primary-50 transition-all aspect-square h-6 w-6 flex items-center justify-center rounded-full cursor-pointer">
-        <i class="pi pi-window-maximize !text-xs"></i>
+      <span @click="maxWindow"
+            class="text-white hover:bg-red-500 transition-all aspect-square h-6 w-6 flex items-center justify-center rounded-full cursor-pointer">
+        <i class="pi pi-arrow-up-right-and-arrow-down-left-from-center !text-xs"></i>
       </span>
       <span @click="closeWindow"
-        class="text-primary-950 hover:bg-red-500 hover:text-primary-50 transition-all aspect-square h-6 w-6 flex items-center justify-center rounded-full cursor-pointer">
+            class="text-white  hover:bg-red-500 transition-all aspect-square h-6 w-6 flex items-center justify-center rounded-full cursor-pointer">
         <i class="pi pi-times !text-xs"></i>
       </span>
     </div>
 
-      <!--      <Button icon="pi pi-times"-->
-      <!--              severity="danger"-->
-      <!--              size="small"-->
-      <!--              variant="text"-->
-      <!--              rounded-->
-      <!--              aria-label="Close"-->
-      <!--              @click="closeWindow"-->
-      <!--              class="!p-0 !h-6 !w-6"/>-->
 
     </div>
     <div class="overflow-y-scroll h-full">
